@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Hotel Login - Email Automation{% endblock %}
+
+{% block public_content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+        <div class="card shadow">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <i class="fas fa-hotel fa-3x text-primary mb-3"></i>
+                    <h3 class="card-title">Hotel Login</h3>
+                    <p class="text-muted">Access your email automation dashboard</p>
+                </div>
+                
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="hotel_domain" class="form-label">Hotel Domain</label>
+                        <input type="text" class="form-control" id="hotel_domain" name="hotel_domain" 
+                               placeholder="e.g., cornelia" required>
+                        <div class="form-text">Your unique hotel identifier</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" 
+                               placeholder="Enter your username" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" 
+                               placeholder="Enter your password" required>
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="remember">
+                        <label class="form-check-label" for="remember">Remember me</label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100 mb-3">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                </form>
+                
+                <hr>
+                
+                <div class="text-center">
+                    <p class="mb-2"><strong>Demo Credentials:</strong></p>
+                    <p class="small text-muted">
+                        Domain: <code>cornelia</code><br>
+                        Username: <code>admin</code><br>
+                        Password: <code>admin123</code>
+                    </p>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <p class="text-muted">Don't have an account?</p>
+                    <a href="#" class="btn btn-outline-primary">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Features Preview -->
+        <div class="mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">
+                        <i class="fas fa-star text-warning"></i> What's Included
+                    </h6>
+                    <ul class="list-unstyled mb-0">
+                        <li><i class="fas fa-check text-success"></i> Real-time Gmail monitoring</li>
+                        <li><i class="fas fa-check text-success"></i> AI-powered email analysis</li>
+                        <li><i class="fas fa-check text-success"></i> Multi-language support</li>
+                        <li><i class="fas fa-check text-success"></i> Automatic pricing</li>
+                        <li><i class="fas fa-check text-success"></i> Customer management</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

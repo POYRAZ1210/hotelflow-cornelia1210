@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cornelia Diamond Resort & Spa - Hotel Management Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-hover { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .pulse-ring { animation: pulse-ring 1.25s cubic-bezier(0.215, 0.61, 0.355, 1) infinite; }
+        @keyframes pulse-ring { 0% { transform: scale(0.33); } 40%, 50% { opacity: 0; } 100% { opacity: 0; transform: scale(1.33); } }
+        .status-online { color: #10b981; }
+        .status-processing { color: #f59e0b; }
+        .room-card { border-left: 4px solid #3b82f6; }
+        .room-card.low-inventory { border-left-color: #ef4444; }
+        .animate-bounce-slow { animation: bounce 2s infinite; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold text-gray-900">
+                            <i class="fas fa-hotel text-blue-600 mr-2"></i>
+                            Cornelia Diamond Resort & Spa
+                        </h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <div class="absolute -inset-1 bg-green-500 rounded-full pulse-ring"></div>
+                        <div class="relative bg-green-500 rounded-full w-3 h-3"></div>
+                    </div>
+                    <span class="text-sm text-gray-700 status-online">
+                        <i class="fas fa-circle mr-1"></i>
+                        System Online
+                    </span>
+                    <button id="logoutBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        
+        <!-- Welcome Section -->
+        <div class="gradient-bg rounded-lg p-6 mb-8 text-white">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-3xl font-bold mb-2">Welcome to Hotel Management Dashboard</h2>
+                    <p class="text-blue-100">AI-Powered Email Automation & Room Inventory Management</p>
+                </div>
+                <div class="text-right">
+                    <div class="text-sm text-blue-100" id="currentTime"></div>
+                    <div class="text-lg font-semibold">Email Monitor: <span class="text-green-300">Active</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-envelope text-blue-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-500">Total Emails</p>
+                        <p class="text-2xl font-bold text-gray-900" id="totalEmails">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-reply text-green-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-500">Responses Sent</p>
+                        <p class="text-2xl font-bold text-gray-900" id="responsesSent">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-bed text-purple-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-500">Total Bookings</p>
+                        <p class="text-2xl font-bold text-gray-900" id="totalBookings">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6 card-hover">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-percentage text-yellow-600 text-xl"></i>
+                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-500">Response Rate</p>
+                        <p class="text-2xl font-bold text-gray-900" id="responseRate">0%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Room Inventory Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <div class="bg-white rounded-lg shadow-md">
+                <div class="p-6 border-b border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900">
+                        <i class="fas fa-door-open text-blue-600 mr-2"></i>
+                        Room Inventory
+                    </h3>
+                </div>
+                <div class="p-6">
+                    <div id="roomInventory" class="space-y-4">
+                        <!-- Room inventory will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md">
+                <div class="p-6 border-b border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900">
+                        <i class="fas fa-chart-pie text-green-600 mr-2"></i>
+                        Occupancy Overview
+                    </h3>
+                </div>
+                <div class="p-6">
+                    <canvas id="occupancyChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <div class="bg-white rounded-lg shadow-md">
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-semibold text-gray-900">
+                            <i class="fas fa-clock text-purple-600 mr-2"></i>
+                            Recent Emails
+                        </h3>
+                        <button id="refreshEmails" class="text-blue-600 hover:text-blue-800 text-sm">
+                            <i class="fas fa-sync-alt mr-1"></i>Refresh
+                        </button>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div id="recentEmails" class="space-y-4">
+                        <!-- Recent emails will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md">
+                <div class="p-6 border-b border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900">
+                        <i class="fas fa-language text-orange-600 mr-2"></i>
+                        Language Distribution
+                    </h3>
+                </div>
+                <div class="p-6">
+                    <canvas id="languageChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="bg-white rounded-lg shadow-md mb-8">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900">
+                    <i class="fas fa-cogs text-gray-600 mr-2"></i>
+                    Control Panel
+                </h3>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <button id="monitorEmailsBtn" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-envelope-open-text mr-2"></i>
+                        Monitor Emails
+                    </button>
+                    <button id="testEmailBtn" class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-vial mr-2"></i>
+                        Test Email Processing
+                    </button>
+                    <button id="viewAllEmailsBtn" class="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-list mr-2"></i>
+                        View All Emails
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Email Modal -->
+        <div id="testEmailModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+            <div class="flex items-center justify-center min-h-screen p-4">
+                <div class="bg-white rounded-lg max-w-2xl w-full">
+                    <div class="p-6 border-b border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-900">Test Email Processing</h3>
+                    </div>
+                    <div class="p-6">
+                        <textarea id="testEmailContent" class="w-full h-32 p-3 border border-gray-300 rounded-md" placeholder="Enter email content to test..."></textarea>
+                        <div class="mt-4 flex justify-end space-x-3">
+                            <button id="cancelTestBtn" class="px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300">Cancel</button>
+                            <button id="processTestBtn" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Process</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Results Modal -->
+        <div id="testResultsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+            <div class="flex items-center justify-center min-h-screen p-4">
+                <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                    <div class="p-6 border-b border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-900">Email Processing Results</h3>
+                    </div>
+                    <div class="p-6">
+                        <div id="testResults" class="space-y-6">
+                            <!-- Test results will be displayed here -->
+                        </div>
+                        <div class="mt-6 flex justify-end">
+                            <button id="closeResultsBtn" class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Global variables
+        let dashboardData = {};
+        let occupancyChart = null;
+        let languageChart = null;
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthentication();
+            initializeDashboard();
+            updateCurrentTime();
+            setInterval(updateCurrentTime, 1000);
+            setInterval(refreshDashboard, 30000); // Refresh every 30 seconds
+        });
+
+        function checkAuthentication() {
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                window.location.href = '/login';
+                return;
+            }
+        }
+
+        function updateCurrentTime() {
+            const now = new Date();
+            document.getElementById('currentTime').textContent = now.toLocaleString();
+        }
+
+        async function initializeDashboard() {
+            try {
+                await loadDashboardStats();
+                await loadRoomInventory();
+                await loadRecentEmails();
+                initializeCharts();
+            } catch (error) {
+                console.error('Dashboard initialization failed:', error);
+                showNotification('Failed to load dashboard data', 'error');
+            }
+        }
+
+        async function loadDashboardStats() {
+            try {
+                const response = await fetch('/api/dashboard/stats', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('Failed to load stats');
+
+                dashboardData = await response.json();
+
+                // Update stat cards
+                document.getElementById('totalEmails').textContent = dashboardData.total_emails;
+                document.getElementById('responsesSent').textContent = dashboardData.processed_emails;
+                document.getElementById('totalBookings').textContent = dashboardData.total_bookings;
+                document.getElementById('responseRate').textContent = dashboardData.processing_rate + '%';
+
+            } catch (error) {
+                console.error('Error loading dashboard stats:', error);
+            }
+        }
+
+        async function loadRoomInventory() {
+            try {
+                const response = await fetch('/api/rooms', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('Failed to load rooms');
+
+                const rooms = await response.json();
+                const inventoryContainer = document.getElementById('roomInventory');
+                
+                if (rooms.length === 0) {
+                    inventoryContainer.innerHTML = '<p class="text-gray-500">No room data available</p>';
+                    return;
+                }
+
+                inventoryContainer.innerHTML = rooms.map(room => {
+                    const occupancyRate = ((room.total_rooms - room.available_rooms) / room.total_rooms * 100).toFixed(1);
+                    const isLowInventory = room.available_rooms <= 5;
+                    
+                    return `
+                        <div class="room-card ${isLowInventory ? 'low-inventory' : ''} bg-gray-50 p-4 rounded-lg">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="font-semibold text-gray-900 capitalize">${room.room_type}</h4>
+                                <span class="text-sm ${isLowInventory ? 'text-red-600 font-bold' : 'text-gray-600'}">
+                                    ${room.available_rooms}/${room.total_rooms} Available
+                                </span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                                <div class="bg-blue-600 h-2 rounded-full" style="width: ${occupancyRate}%"></div>
+                            </div>
+                            <div class="flex justify-between text-sm text-gray-600">
+                                <span>€${room.base_price_eur}/night</span>
+                                <span>${occupancyRate}% Occupied</span>
+                            </div>
+                            ${isLowInventory ? '<div class="mt-2 text-red-600 text-sm font-semibold animate-bounce-slow"><i class="fas fa-exclamation-triangle mr-1"></i>Low Inventory!</div>' : ''}
+                        </div>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                console.error('Error loading room inventory:', error);
+            }
+        }
+
+        async function loadRecentEmails() {
+            try {
+                const response = await fetch('/api/emails?limit=5', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('Failed to load emails');
+
+                const data = await response.json();
+                const emailsContainer = document.getElementById('recentEmails');
+                
+                if (data.emails.length === 0) {
+                    emailsContainer.innerHTML = '<p class="text-gray-500">No recent emails</p>';
+                    return;
+                }
+
+                emailsContainer.innerHTML = data.emails.map(email => {
+                    const timeAgo = new Date(email.created_at).toLocaleString();
+                    const languageFlag = getLanguageFlag(email.language);
+                    
+                    return `
+                        <div class="border-l-4 border-blue-500 pl-4 py-2">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <p class="font-medium text-gray-900">${email.sender_email}</p>
+                                    <p class="text-sm text-gray-600 truncate">${email.subject}</p>
+                                    <p class="text-xs text-gray-500 mt-1">${timeAgo}</p>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-lg">${languageFlag}</span>
+                                    <span class="px-2 py-1 text-xs rounded-full ${email.response_sent ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}">
+                                        ${email.response_sent ? 'Responded' : 'Pending'}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                console.error('Error loading recent emails:', error);
+            }
+        }
+
+        function initializeCharts() {
+            // Occupancy Chart
+            const occupancyCtx = document.getElementById('occupancyChart').getContext('2d');
+            const roomStats = dashboardData.room_stats || [];
+            
+            occupancyChart = new Chart(occupancyCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: roomStats.map(room => room.room_type.charAt(0).toUpperCase() + room.room_type.slice(1)),
+                    datasets: [{
+                        data: roomStats.map(room => room.occupancy_rate),
+                        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Language Distribution Chart
+            const languageCtx = document.getElementById('languageChart').getContext('2d');
+            const languageData = {
+                'English': 45,
+                'Turkish': 25,
+                'German': 15,
+                'French': 10,
+                'Russian': 5
+            };
+            
+            languageChart = new Chart(languageCtx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(languageData),
+                    datasets: [{
+                        label: 'Emails',
+                        data: Object.values(languageData),
+                        backgroundColor: '#3b82f6',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function getLanguageFlag(language) {
+            const flags = {
+                'en': '🇺🇸',
+                'tr': '🇹🇷',
+                'de': '🇩🇪',
+                'fr': '🇫🇷',
+                'ru': '🇷🇺'
+            };
+            return flags[language] || '🌐';
+        }
+
+        async function refreshDashboard() {
+            await loadDashboardStats();
+            await loadRoomInventory();
+            await loadRecentEmails();
+        }
+
+        function showNotification(message, type = 'info') {
+            // Simple notification system
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 p-4 rounded-lg text-white z-50 ${
+                type === 'error' ? 'bg-red-500' : type === 'success' ? 'bg-green-500' : 'bg-blue-500'
+            }`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Event listeners
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user_data');
+            window.location.href = '/login';
+        });
+
+        document.getElementById('refreshEmails').addEventListener('click', function() {
+            loadRecentEmails();
+            showNotification('Emails refreshed', 'success');
+        });
+
+        document.getElementById('monitorEmailsBtn').addEventListener('click', async function() {
+            try {
+                const response = await fetch('/api/monitor-emails', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                    }
+                });
+
+                if (response.ok) {
+                    showNotification('Email monitoring triggered', 'success');
+                    setTimeout(refreshDashboard, 2000);
+                } else {
+                    throw new Error('Failed to trigger email monitoring');
+                }
+            } catch (error) {
+                showNotification('Failed to monitor emails', 'error');
+            }
+        });
+
+        document.getElementById('testEmailBtn').addEventListener('click', function() {
+            document.getElementById('testEmailModal').classList.remove('hidden');
+        });
+
+        document.getElementById('cancelTestBtn').addEventListener('click', function() {
+            document.getElementById('testEmailModal').classList.add('hidden');
+        });
+
+        document.getElementById('processTestBtn').addEventListener('click', async function() {
+            const content = document.getElementById('testEmailContent').value.trim();
+            if (!content) {
+                showNotification('Please enter email content', 'error');
+                return;
+            }
+
+            try {
+                const formData = new FormData();
+                formData.append('content', content);
+
+                const response = await fetch('/api/test/email', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                    },
+                    body: formData
+                });
+
+                if (!response.ok) throw new Error('Test failed');
+
+                const results = await response.json();
+                displayTestResults(results);
+                
+                document.getElementById('testEmailModal').classList.add('hidden');
+                document.getElementById('testResultsModal').classList.remove('hidden');
+                
+            } catch (error) {
+                showNotification('Test processing failed', 'error');
+            }
+        });
+
+        document.getElementById('closeResultsBtn').addEventListener('click', function() {
+            document.getElementById('testResultsModal').classList.add('hidden');
+        });
+
+        document.getElementById('viewAllEmailsBtn').addEventListener('click', function() {
+            // This would typically navigate to a dedicated emails page
+            showNotification('Email list view coming soon', 'info');
+        });
+
+        function displayTestResults(results) {
+            const container = document.getElementById('testResults');
+            
+            container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-blue-900 mb-2">Language Detection</h4>
+                        <p class="text-blue-800">Detected Language: <span class="font-bold">${results.language}</span> ${getLanguageFlag(results.language)}</p>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-green-900 mb-2">Booking Analysis</h4>
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div><strong>Adults:</strong> ${results.booking_analysis.adults}</div>
+                            <div><strong>Children:</strong> ${results.booking_analysis.children}</div>
+                            <div><strong>Nights:</strong> ${results.booking_analysis.nights}</div>
+                            <div><strong>Room Type:</strong> ${results.booking_analysis.room_type}</div>
+                            <div><strong>Complete Booking:</strong> ${results.booking_analysis.has_complete_booking ? 'Yes' : 'No'}</div>
+                            <div><strong>Urgency:</strong> ${results.booking_analysis.urgency}</div>
+                        </div>
+                        ${results.booking_analysis.missing_info && results.booking_analysis.missing_info.length > 0 ? 
+                            `<div class="mt-2"><strong>Missing Info:</strong> ${results.booking_analysis.missing_info.join(', ')}</div>` : ''
+                        }
+                    </div>
+                    
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-purple-900 mb-2">Generated Response</h4>
+                        <div class="bg-white p-4 rounded border text-sm whitespace-pre-wrap">${results.response_content}</div>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

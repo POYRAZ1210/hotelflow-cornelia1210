@@ -1,0 +1,401 @@
+{% extends "base.html" %}
+
+{% block title %}Email Detail - {{ hotel.name }}{% endblock %}
+
+{% block page_title %}Email Detail{% endblock %}
+
+{% block page_actions %}
+<div class="d-flex gap-2">
+    <a href="{{ url_for('emails') }}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left"></i> Back to Emails
+    </a>
+    {% if not email.response_sent and user.can_send_emails %}
+    <button class="btn btn-success" onclick="sendResponse()">
+        <i class="fas fa-paper-plane"></i> Send Response
+    </button>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <!-- Email Content -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-envelope"></i> {{ email.subject }}
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-3">
+                    <div>
+                        <strong>From:</strong> {{ email.sender_name or 'Unknown' }} &lt;{{ email.sender_email }}&gt;
+                    </div>
+                    <div class="text-muted">
+                        {{ email.received_at.strftime('%B %d, %Y at %H:%M') if email.received_at else email.processed_at.strftime('%B %d, %Y at %H:%M') }}
+                    </div>
+                </div>
+                
+                <div class="email-content">
+                    <pre style="white-space: pre-wrap; font-family: inherit;">{{ email.content }}</pre>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Generated Response -->
+        {% if email.response_sent %}
+        <div class="card mt-4">
+            <div class="card-header bg-success text-white">
+                <h6 class="mb-0">
+                    <i class="fas fa-reply"></i> Automated Response Sent
+                </h6>
+            </div>
+            <div class="card-body">
+                <div id="generatedResponse">
+                    <div class="text-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p>Loading response preview...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="col-lg-4">
+        <!-- Email Status -->
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">Email Status</h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <span class="email-status status-{{ email.status }}">{{ email.status.title() }}</span>
+                    <span class="badge 
+                        {% if email.priority == 'urgent' %}bg-danger{% endif %}
+                        {% if email.priority == 'high' %}bg-warning{% endif %}
+                        {% if email.priority == 'normal' %}bg-success{% endif %}
+                        {% if email.priority == 'low' %}bg-secondary{% endif %}
+                    " style="margin-left: 10px;">{{ email.priority.title() }}</span>
+                </div>
+                
+                <table class="table table-sm">
+                    <tr>
+                        <td><strong>Gmail ID:</strong></td>
+                        <td><code>{{ email.gmail_id[:15] }}...</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Language:</strong></td>
+                        <td>
+                            <span class="badge bg-info">{{ email.language_detected.upper() }}</span>
+                            {% if email.language_confidence %}
+                            ({{ (email.language_confidence * 100) | round }}%)
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Response Sent:</strong></td>
+                        <td>
+                            {% if email.response_sent %}
+                                <span class="text-success"><i class="fas fa-check"></i> Yes</span>
+                            {% else %}
+                                <span class="text-danger"><i class="fas fa-times"></i> No</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Processing Time:</strong></td>
+                        <td>{{ email.processing_time_ms }}ms</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Booking Analysis -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="mb-0">Booking Analysis</h6>
+            </div>
+            <div class="card-body">
+                {% if email.has_complete_booking %}
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle"></i> Complete booking information
+                </div>
+                {% else %}
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i> Incomplete booking information
+                </div>
+                {% endif %}
+                
+                <table class="table table-sm">
+                    {% if email.guest_count %}
+                    <tr>
+                        <td><strong>Guests:</strong></td>
+                        <td>{{ email.guest_count }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if email.children_count %}
+                    <tr>
+                        <td><strong>Children:</strong></td>
+                        <td>{{ email.children_count }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if email.nights %}
+                    <tr>
+                        <td><strong>Nights:</strong></td>
+                        <td>{{ email.nights }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if email.room_type_requested %}
+                    <tr>
+                        <td><strong>Room Type:</strong></td>
+                        <td>{{ email.room_type_requested.title() }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if email.check_in_date %}
+                    <tr>
+                        <td><strong>Check-in:</strong></td>
+                        <td>{{ email.check_in_date.strftime('%Y-%m-%d') }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if email.check_out_date %}
+                    <tr>
+                        <td><strong>Check-out:</strong></td>
+                        <td>{{ email.check_out_date.strftime('%Y-%m-%d') }}</td>
+                    </tr>
+                    {% endif %}
+                </table>
+                
+                {% if email.missing_information %}
+                {% set missing = email.missing_information | from_json %}
+                {% if missing %}
+                <div class="mt-3">
+                    <strong>Missing Information:</strong>
+                    <ul class="list-unstyled mt-2">
+                        {% for item in missing %}
+                        <li><i class="fas fa-minus text-danger"></i> {{ item.replace('_', ' ').title() }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Pricing Information -->
+        {% if email.quoted_price_eur %}
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="mb-0">Pricing Information</h6>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-3">
+                    <h4 class="text-primary">€{{ email.quoted_price_eur }}</h4>
+                    {% if email.quoted_price_local and email.local_currency != 'EUR' %}
+                    <p class="text-muted">{{ email.local_currency }} {{ email.quoted_price_local | round | int }}</p>
+                    {% endif %}
+                </div>
+                
+                {% if email.exchange_rate %}
+                <div class="small text-muted text-center">
+                    Exchange Rate: 1 EUR = {{ email.exchange_rate }} {{ email.local_currency }}
+                </div>
+                {% endif %}
+                
+                {% if email.discount_applied and email.discount_applied > 0 %}
+                <div class="alert alert-info mt-3">
+                    <i class="fas fa-tag"></i> Discount Applied: {{ email.discount_applied }}%
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Customer Information -->
+        {% if email.customer %}
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="mb-0">Customer Profile</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                        {{ email.customer.name[:1].upper() if email.customer.name else email.customer.email[:1].upper() }}
+                    </div>
+                    <div class="ms-3">
+                        <div class="fw-bold">{{ email.customer.name or 'Unknown' }}</div>
+                        <div class="text-muted small">{{ email.customer.email }}</div>
+                    </div>
+                </div>
+                
+                <table class="table table-sm">
+                    <tr>
+                        <td><strong>Total Emails:</strong></td>
+                        <td>{{ email.customer.total_emails }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Customer Type:</strong></td>
+                        <td>
+                            <span class="badge 
+                                {% if email.customer.customer_type == 'new' %}bg-info{% endif %}
+                                {% if email.customer.customer_type == 'returning' %}bg-success{% endif %}
+                                {% if email.customer.customer_type == 'vip' %}bg-warning{% endif %}
+                            ">{{ email.customer.customer_type.title() }}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Last Contact:</strong></td>
+                        <td>{{ email.customer.last_contact.strftime('%Y-%m-%d') }}</td>
+                    </tr>
+                    {% if email.customer.total_bookings > 0 %}
+                    <tr>
+                        <td><strong>Total Bookings:</strong></td>
+                        <td>{{ email.customer.total_bookings }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if email.customer.preferred_language %}
+                    <tr>
+                        <td><strong>Preferred Language:</strong></td>
+                        <td><span class="badge bg-secondary">{{ email.customer.preferred_language.upper() }}</span></td>
+                    </tr>
+                    {% endif %}
+                </table>
+                
+                <div class="mt-3">
+                    <a href="{{ url_for('customers') }}?email={{ email.customer.email }}" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-user"></i> View Customer Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Actions -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="mb-0">Actions</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    {% if user.can_send_emails %}
+                    <button class="btn btn-outline-primary" onclick="forwardEmail()">
+                        <i class="fas fa-forward"></i> Forward Email
+                    </button>
+                    {% endif %}
+                    
+                    <button class="btn btn-outline-secondary" onclick="markAsSpam()">
+                        <i class="fas fa-ban"></i> Mark as Spam
+                    </button>
+                    
+                    <button class="btn btn-outline-info" onclick="addNote()">
+                        <i class="fas fa-sticky-note"></i> Add Note
+                    </button>
+                    
+                    <a href="mailto:{{ email.sender_email }}" class="btn btn-outline-success">
+                        <i class="fas fa-envelope"></i> Reply Manually
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Generate response preview
+async function generateResponsePreview() {
+    if (!document.getElementById('generatedResponse')) return;
+    
+    try {
+        const response = await fetch(`/api/email/{{ email.id }}/response-preview`);
+        if (response.ok) {
+            const html = await response.text();
+            document.getElementById('generatedResponse').innerHTML = html;
+        } else {
+            document.getElementById('generatedResponse').innerHTML = 
+                '<div class="alert alert-danger">Failed to load response preview</div>';
+        }
+    } catch (error) {
+        document.getElementById('generatedResponse').innerHTML = 
+            '<div class="alert alert-danger">Error loading response preview</div>';
+    }
+}
+
+// Send response
+async function sendResponse() {
+    if (!confirm('Send automated response to this customer?')) return;
+    
+    try {
+        const response = await fetch(`/api/email/{{ email.id }}/send-response`, {
+            method: 'POST'
+        });
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            alert('Response sent successfully!');
+            location.reload();
+        } else {
+            alert('Error: ' + data.error);
+        }
+    } catch (error) {
+        alert('Network error: ' + error.message);
+    }
+}
+
+// Forward email
+function forwardEmail() {
+    const subject = encodeURIComponent('Fwd: {{ email.subject }}');
+    const body = encodeURIComponent(`
+---------- Forwarded message ---------
+From: {{ email.sender_email }}
+Date: {{ email.received_at.strftime('%Y-%m-%d %H:%M') if email.received_at else email.processed_at.strftime('%Y-%m-%d %H:%M') }}
+Subject: {{ email.subject }}
+
+{{ email.content }}
+    `);
+    
+    window.open(`mailto:?subject=${subject}&body=${body}`);
+}
+
+// Mark as spam
+async function markAsSpam() {
+    if (!confirm('Mark this email as spam?')) return;
+    
+    try {
+        const response = await fetch(`/api/email/{{ email.id }}/mark-spam`, {
+            method: 'POST'
+        });
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            alert('Email marked as spam');
+            window.location.href = '{{ url_for("emails") }}';
+        } else {
+            alert('Error: ' + data.error);
+        }
+    } catch (error) {
+        alert('Network error: ' + error.message);
+    }
+}
+
+// Add note
+function addNote() {
+    const note = prompt('Add a note about this email:');
+    if (!note) return;
+    
+    // Implementation would save note to database
+    alert('Note functionality will be implemented');
+}
+
+// Load response preview on page load
+document.addEventListener('DOMContentLoaded', function() {
+    {% if email.response_sent %}
+    generateResponsePreview();
+    {% endif %}
+});
+</script>
+{% endblock %}

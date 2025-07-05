@@ -1,0 +1,374 @@
+{% extends "base.html" %}
+
+{% block title %}Customers - {{ hotel.name }}{% endblock %}
+
+{% block page_title %}Customer Management{% endblock %}
+
+{% block page_actions %}
+<div class="d-flex gap-2">
+    <button class="btn btn-outline-primary" onclick="exportCustomers()">
+        <i class="fas fa-download"></i> Export
+    </button>
+    <div class="dropdown">
+        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            <i class="fas fa-filter"></i> Filter
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="?type=new">New Customers</a></li>
+            <li><a class="dropdown-item" href="?type=returning">Returning</a></li>
+            <li><a class="dropdown-item" href="?type=vip">VIP Customers</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="?">All Customers</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Customer Statistics -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+                <h5 class="card-title">{{ customers.total }}</h5>
+                <p class="card-text">Total Customers</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body text-center">
+                <h5 class="card-title">{{ customers.items | selectattr('customer_type', 'equalto', 'returning') | list | length }}</h5>
+                <p class="card-text">Returning</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+                <h5 class="card-title">{{ customers.items | selectattr('customer_type', 'equalto', 'vip') | list | length }}</h5>
+                <p class="card-text">VIP</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body text-center">
+                <h5 class="card-title">{{ customers.items | selectattr('customer_type', 'equalto', 'new') | list | length }}</h5>
+                <p class="card-text">New</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Search and Filters -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="GET" class="row g-3">
+            <div class="col-md-4">
+                <input type="text" class="form-control" name="search" 
+                       placeholder="Search by name or email..." 
+                       value="{{ request.args.get('search', '') }}">
+            </div>
+            <div class="col-md-2">
+                <select class="form-select" name="language">
+                    <option value="">All Languages</option>
+                    <option value="tr" {{ 'selected' if request.args.get('language') == 'tr' }}>Turkish</option>
+                    <option value="en" {{ 'selected' if request.args.get('language') == 'en' }}>English</option>
+                    <option value="de" {{ 'selected' if request.args.get('language') == 'de' }}>German</option>
+                    <option value="fr" {{ 'selected' if request.args.get('language') == 'fr' }}>French</option>
+                    <option value="ru" {{ 'selected' if request.args.get('language') == 'ru' }}>Russian</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-select" name="type">
+                    <option value="">All Types</option>
+                    <option value="new" {{ 'selected' if request.args.get('type') == 'new' }}>New</option>
+                    <option value="returning" {{ 'selected' if request.args.get('type') == 'returning' }}>Returning</option>
+                    <option value="vip" {{ 'selected' if request.args.get('type') == 'vip' }}>VIP</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+            <div class="col-md-2">
+                <a href="{{ url_for('customers') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-times"></i> Clear
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Customer List -->
+<div class="card">
+    <div class="card-header">
+        <h6 class="m-0 font-weight-bold text-primary">
+            <i class="fas fa-users"></i> Customer Database
+        </h6>
+    </div>
+    <div class="card-body">
+        {% if customers.items %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Contact</th>
+                        <th>Communication</th>
+                        <th>Preferences</th>
+                        <th>Type & Loyalty</th>
+                        <th>Bookings</th>
+                        <th>Last Contact</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for customer in customers.items %}
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                    {{ customer.name[:1].upper() if customer.name else customer.email[:1].upper() }}
+                                </div>
+                                <div>
+                                    <div class="fw-bold">{{ customer.name or 'Unknown' }}</div>
+                                    <div class="text-muted small">{{ customer.email }}</div>
+                                    {% if customer.phone %}
+                                    <div class="text-muted small">
+                                        <i class="fas fa-phone"></i> {{ customer.phone }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="small">
+                                <div><strong>Emails:</strong> {{ customer.total_emails }}</div>
+                                <div><strong>Bookings:</strong> {{ customer.total_bookings }}</div>
+                                {% if customer.total_spent > 0 %}
+                                <div><strong>Spent:</strong> €{{ customer.total_spent }}</div>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td>
+                            {% if customer.preferred_language %}
+                            <span class="badge bg-info mb-1">{{ customer.preferred_language.upper() }}</span><br>
+                            {% endif %}
+                            
+                            {% if customer.marketing_consent %}
+                            <span class="badge bg-success">Marketing OK</span><br>
+                            {% endif %}
+                            
+                            {% if customer.newsletter_subscribed %}
+                            <span class="badge bg-primary">Newsletter</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if customer.preferred_room_type %}
+                            <div class="small"><strong>Room:</strong> {{ customer.preferred_room_type.title() }}</div>
+                            {% endif %}
+                            
+                            {% if customer.average_stay_nights %}
+                            <div class="small"><strong>Avg Stay:</strong> {{ customer.average_stay_nights | round(1) }} nights</div>
+                            {% endif %}
+                            
+                            {% if customer.special_requests %}
+                            <div class="small text-muted">Has special requests</div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="badge 
+                                {% if customer.customer_type == 'new' %}bg-info{% endif %}
+                                {% if customer.customer_type == 'returning' %}bg-success{% endif %}
+                                {% if customer.customer_type == 'vip' %}bg-warning{% endif %}
+                            ">{{ customer.customer_type.title() }}</span>
+                            
+                            <div class="mt-1">
+                                <span class="badge 
+                                    {% if customer.loyalty_level == 'bronze' %}bg-secondary{% endif %}
+                                    {% if customer.loyalty_level == 'silver' %}bg-light text-dark{% endif %}
+                                    {% if customer.loyalty_level == 'gold' %}bg-warning{% endif %}
+                                    {% if customer.loyalty_level == 'platinum' %}bg-dark{% endif %}
+                                ">{{ customer.loyalty_level.title() }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="small">
+                                <div><strong>Total:</strong> {{ customer.total_bookings }}</div>
+                                {% if customer.last_booking %}
+                                <div><strong>Last:</strong> {{ customer.last_booking.strftime('%Y-%m-%d') }}</div>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="small">{{ customer.last_contact.strftime('%Y-%m-%d') }}</div>
+                            <div class="text-muted small">{{ customer.last_contact.strftime('%H:%M') }}</div>
+                        </td>
+                        <td>
+                            <div class="btn-group-vertical btn-group-sm">
+                                <button class="btn btn-outline-primary btn-sm" onclick="viewCustomer({{ customer.id }})">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                {% if user.can_send_emails %}
+                                <a href="mailto:{{ customer.email }}" class="btn btn-outline-success btn-sm">
+                                    <i class="fas fa-envelope"></i>
+                                </a>
+                                {% endif %}
+                                <button class="btn btn-outline-info btn-sm" onclick="editCustomer({{ customer.id }})">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination -->
+        {% if customers.pages > 1 %}
+        <nav aria-label="Customer pagination">
+            <ul class="pagination justify-content-center">
+                {% if customers.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('customers', page=customers.prev_num, **request.args) }}">Previous</a>
+                </li>
+                {% endif %}
+                
+                {% for page_num in customers.iter_pages() %}
+                    {% if page_num %}
+                        {% if page_num != customers.page %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('customers', page=page_num, **request.args) }}">{{ page_num }}</a>
+                        </li>
+                        {% else %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ page_num }}</span>
+                        </li>
+                        {% endif %}
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if customers.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('customers', page=customers.next_num, **request.args) }}">Next</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+        
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-users fa-4x text-muted mb-3"></i>
+            <h4 class="text-muted">No customers found</h4>
+            <p class="text-muted">Customers will appear here as emails are processed.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Customer Detail Modal -->
+<div class="modal fade" id="customerModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Customer Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="customerModalBody">
+                <div class="text-center">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// View customer details
+async function viewCustomer(customerId) {
+    const modal = new bootstrap.Modal(document.getElementById('customerModal'));
+    modal.show();
+    
+    try {
+        const response = await fetch(`/api/customer/${customerId}`);
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            document.getElementById('customerModalBody').innerHTML = generateCustomerDetail(data.customer);
+        } else {
+            document.getElementById('customerModalBody').innerHTML = 
+                '<div class="alert alert-danger">Error loading customer details</div>';
+        }
+    } catch (error) {
+        document.getElementById('customerModalBody').innerHTML = 
+            '<div class="alert alert-danger">Network error loading customer details</div>';
+    }
+}
+
+// Generate customer detail HTML
+function generateCustomerDetail(customer) {
+    return `
+        <div class="row">
+            <div class="col-md-6">
+                <h6>Contact Information</h6>
+                <table class="table table-sm">
+                    <tr><td><strong>Name:</strong></td><td>${customer.name || 'Unknown'}</td></tr>
+                    <tr><td><strong>Email:</strong></td><td>${customer.email}</td></tr>
+                    <tr><td><strong>Phone:</strong></td><td>${customer.phone || 'Not provided'}</td></tr>
+                    <tr><td><strong>Language:</strong></td><td>${customer.preferred_language ? customer.preferred_language.toUpperCase() : 'Not set'}</td></tr>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <h6>Statistics</h6>
+                <table class="table table-sm">
+                    <tr><td><strong>Total Emails:</strong></td><td>${customer.total_emails}</td></tr>
+                    <tr><td><strong>Total Bookings:</strong></td><td>${customer.total_bookings}</td></tr>
+                    <tr><td><strong>Total Spent:</strong></td><td>€${customer.total_spent}</td></tr>
+                    <tr><td><strong>Customer Type:</strong></td><td><span class="badge bg-primary">${customer.customer_type}</span></td></tr>
+                    <tr><td><strong>Loyalty Level:</strong></td><td><span class="badge bg-warning">${customer.loyalty_level}</span></td></tr>
+                </table>
+            </div>
+        </div>
+        
+        ${customer.special_requests ? `
+        <div class="mt-3">
+            <h6>Special Requests</h6>
+            <div class="alert alert-info">${customer.special_requests}</div>
+        </div>
+        ` : ''}
+        
+        <div class="mt-3">
+            <h6>Recent Activity</h6>
+            <div class="small text-muted">Last contact: ${new Date(customer.last_contact).toLocaleDateString()}</div>
+            ${customer.last_booking ? `<div class="small text-muted">Last booking: ${new Date(customer.last_booking).toLocaleDateString()}</div>` : ''}
+        </div>
+    `;
+}
+
+// Edit customer
+function editCustomer(customerId) {
+    // Implementation for customer editing
+    alert('Customer editing functionality will be implemented');
+}
+
+// Export customers
+function exportCustomers() {
+    const params = new URLSearchParams(window.location.search);
+    params.set('export', 'csv');
+    window.location.href = `{{ url_for('customers') }}?${params.toString()}`;
+}
+</script>
+{% endblock %}

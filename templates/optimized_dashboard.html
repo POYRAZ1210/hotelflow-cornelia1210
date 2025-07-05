@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cornelia Diamond - Optimized Email System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .cost-optimized { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
+        .api-indicator { animation: pulse 2s infinite; }
+        .no-api { background: #e2e8f0; color: #64748b; }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- Header -->
+    <div class="gradient-bg text-white p-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold">🏖️ Cornelia Diamond Resort & Spa</h1>
+                    <p class="text-lg opacity-90">Optimized Email Automation System</p>
+                    <p class="text-sm opacity-75">API Sadece Yeni Email Geldiginde Kullanilir</p>
+                </div>
+                <div class="text-right">
+                    <div class="cost-optimized px-4 py-2 rounded-lg">
+                        <div class="text-sm font-bold">COST OPTIMIZED</div>
+                        <div class="text-xs">Smart API Usage</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Cards -->
+    <div class="max-w-7xl mx-auto p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            
+            <!-- Email Status -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm">Bugun Islenen Email</p>
+                        <p class="text-3xl font-bold text-blue-600">{{ total_emails }}</p>
+                    </div>
+                    <div class="bg-blue-100 p-3 rounded-full">
+                        <i class="fas fa-envelope text-blue-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API Calls -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm">API Cagrilari</p>
+                        <p class="text-3xl font-bold text-green-600">{{ api_calls }}</p>
+                    </div>
+                    <div class="bg-green-100 p-3 rounded-full api-indicator">
+                        <i class="fas fa-robot text-green-600 text-xl"></i>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-500 mt-2">Sadece yeni email geldiginde</p>
+            </div>
+
+            <!-- Cost -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm">Gunluk Maliyet</p>
+                        <p class="text-3xl font-bold text-purple-600">{{ cost_usd }}</p>
+                    </div>
+                    <div class="bg-purple-100 p-3 rounded-full">
+                        <i class="fas fa-dollar-sign text-purple-600 text-xl"></i>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-500 mt-2">~$0.013 per email</p>
+            </div>
+
+            <!-- Fallback Usage -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm">Fallback Kullanimi</p>
+                        <p class="text-3xl font-bold text-orange-600">{{ fallback_used }}</p>
+                    </div>
+                    <div class="bg-orange-100 p-3 rounded-full">
+                        <i class="fas fa-shield-alt text-orange-600 text-xl"></i>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-500 mt-2">API olmadan analiz</p>
+            </div>
+
+        </div>
+
+        <!-- System Status -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            
+            <!-- Current Status -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-bold mb-4 flex items-center">
+                    <i class="fas fa-heartbeat text-red-500 mr-2"></i>
+                    Sistem Durumu
+                </h3>
+                
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                        <span class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            Flask Dashboard
+                        </span>
+                        <span class="text-green-600 font-semibold">Aktif</span>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-3 {% if openai_status == 'Available' %}bg-green-50{% else %}bg-yellow-50{% endif %} rounded-lg">
+                        <span class="flex items-center">
+                            <i class="fas fa-robot {% if openai_status == 'Available' %}text-green-500{% else %}text-yellow-500{% endif %} mr-2"></i>
+                            OpenAI GPT-4o
+                        </span>
+                        <span class="{% if openai_status == 'Available' %}text-green-600{% else %}text-yellow-600{% endif %} font-semibold">{{ openai_status }}</span>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-3 {% if gmail_status == 'Connected' %}bg-green-50{% else %}bg-orange-50{% endif %} rounded-lg">
+                        <span class="flex items-center">
+                            <i class="fas fa-envelope {% if gmail_status == 'Connected' %}text-green-500{% else %}text-orange-500{% endif %} mr-2"></i>
+                            Gmail API
+                        </span>
+                        <span class="{% if gmail_status == 'Connected' %}text-green-600{% else %}text-orange-600{% endif %} font-semibold">{{ gmail_status }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Optimization Features -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-bold mb-4 flex items-center">
+                    <i class="fas fa-rocket text-blue-500 mr-2"></i>
+                    Optimizasyon Ozellikleri
+                </h3>
+                
+                <div class="space-y-3">
+                    <div class="p-3 bg-blue-50 rounded-lg">
+                        <div class="flex items-center mb-1">
+                            <i class="fas fa-clock text-blue-500 mr-2"></i>
+                            <span class="font-semibold">30 Saniye Izleme</span>
+                        </div>
+                        <p class="text-sm text-gray-600">Gmail her 30 saniyede kontrol ediliyor</p>
+                    </div>
+                    
+                    <div class="p-3 bg-green-50 rounded-lg">
+                        <div class="flex items-center mb-1">
+                            <i class="fas fa-brain text-green-500 mr-2"></i>
+                            <span class="font-semibold">Akilli API Kullanimi</span>
+                        </div>
+                        <p class="text-sm text-gray-600">Sadece yeni email geldiginde GPT calisir</p>
+                    </div>
+                    
+                    <div class="p-3 bg-purple-50 rounded-lg">
+                        <div class="flex items-center mb-1">
+                            <i class="fas fa-shield-alt text-purple-500 mr-2"></i>
+                            <span class="font-semibold">Fallback Sistem</span>
+                        </div>
+                        <p class="text-sm text-gray-600">API olmadan da calismaya devam eder</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Actions -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h3 class="text-xl font-bold mb-4 flex items-center">
+                <i class="fas fa-cogs text-gray-600 mr-2"></i>
+                Islemler
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button onclick="checkEmails()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-sync-alt mr-2"></i>
+                    Email Kontrol Et
+                </button>
+                
+                <button onclick="testEmail()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-vial mr-2"></i>
+                    Test Email Isle
+                </button>
+                
+                <button onclick="viewStats()" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-chart-bar mr-2"></i>
+                    Istatistik Goruntule
+                </button>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div id="results" class="bg-white rounded-lg shadow-lg p-6" style="display: none;">
+            <h3 class="text-xl font-bold mb-4">Islem Sonuclari</h3>
+            <div id="results-content"></div>
+        </div>
+
+    </div>
+
+    <script>
+        function checkEmails() {
+            showLoading('Email kontrol ediliyor...');
+            
+            fetch('/api/check-emails')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showResults(`
+                            <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                                <h4 class="font-bold text-green-800">Email Kontrol Tamamlandi</h4>
+                                <p><strong>Yeni Email:</strong> ${data.new_emails}</p>
+                                <p><strong>API Cagrisi:</strong> ${data.api_calls}</p>
+                                <p><strong>Maliyet:</strong> ${data.cost}</p>
+                                <p><strong>Fallback:</strong> ${data.fallback_used}</p>
+                                <p class="text-sm text-gray-600 mt-2">${data.message}</p>
+                            </div>
+                        `);
+                    } else {
+                        showError(data.error);
+                    }
+                })
+                .catch(error => showError(error.message));
+        }
+
+        function testEmail() {
+            showLoading('Test email isleniyor...');
+            
+            fetch('/api/test-email')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const analysis = data.sample_analysis;
+                        showResults(`
+                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                <h4 class="font-bold text-blue-800">Test Email Analizi</h4>
+                                <div class="grid grid-cols-2 gap-4 mt-3">
+                                    <p><strong>Musteri:</strong> ${analysis.guest_name}</p>
+                                    <p><strong>Yetiskin:</strong> ${analysis.adults}</p>
+                                    <p><strong>Cocuk:</strong> ${analysis.children}</p>
+                                    <p><strong>Gece:</strong> ${analysis.nights}</p>
+                                    <p><strong>Oda:</strong> ${analysis.room_type}</p>
+                                    <p><strong>Fiyat:</strong> €${analysis.price_eur}</p>
+                                </div>
+                                <p class="text-sm mt-2"><strong>API Kullanildi:</strong> ${analysis.api_used ? 'Evet' : 'Hayir (Fallback)'}</p>
+                            </div>
+                        `);
+                    } else {
+                        showResults(`
+                            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                                <p class="text-yellow-800">${data.message}</p>
+                            </div>
+                        `);
+                    }
+                })
+                .catch(error => showError(error.message));
+        }
+
+        function viewStats() {
+            showLoading('Istatistikler yukleniyor...');
+            
+            fetch('/api/stats')
+                .then(response => response.json())
+                .then(data => {
+                    let statsHtml = '<div class="bg-purple-50 border border-purple-200 rounded-lg p-4">';
+                    statsHtml += '<h4 class="font-bold text-purple-800 mb-3">Haftalik Istatistikler</h4>';
+                    statsHtml += '<div class="overflow-x-auto"><table class="w-full text-sm">';
+                    statsHtml += '<tr class="border-b"><th class="text-left p-2">Tarih</th><th class="text-left p-2">Email</th><th class="text-left p-2">API</th><th class="text-left p-2">Maliyet</th><th class="text-left p-2">Fallback</th></tr>';
+                    
+                    data.weekly_stats.forEach(stat => {
+                        statsHtml += `<tr class="border-b">
+                            <td class="p-2">${stat.date}</td>
+                            <td class="p-2">${stat.emails}</td>
+                            <td class="p-2">${stat.api_calls}</td>
+                            <td class="p-2">${stat.cost}</td>
+                            <td class="p-2">${stat.fallback}</td>
+                        </tr>`;
+                    });
+                    
+                    statsHtml += '</table></div></div>';
+                    showResults(statsHtml);
+                })
+                .catch(error => showError(error.message));
+        }
+
+        function showLoading(message) {
+            const results = document.getElementById('results');
+            const content = document.getElementById('results-content');
+            content.innerHTML = `
+                <div class="flex items-center justify-center p-8">
+                    <i class="fas fa-spinner fa-spin text-2xl text-gray-400 mr-3"></i>
+                    <span class="text-gray-600">${message}</span>
+                </div>
+            `;
+            results.style.display = 'block';
+        }
+
+        function showResults(html) {
+            const content = document.getElementById('results-content');
+            content.innerHTML = html;
+        }
+
+        function showError(message) {
+            showResults(`
+                <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <h4 class="font-bold text-red-800">Hata</h4>
+                    <p class="text-red-600">${message}</p>
+                </div>
+            `);
+        }
+
+        // Auto refresh every 30 seconds
+        setInterval(() => {
+            location.reload();
+        }, 30000);
+    </script>
+
+</body>
+</html>

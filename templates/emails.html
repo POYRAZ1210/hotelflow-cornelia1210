@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+
+{% block title %}Emails - {{ hotel.name }}{% endblock %}
+
+{% block page_title %}Email Management{% endblock %}
+
+{% block page_actions %}
+<div class="d-flex gap-2">
+    <button class="btn btn-primary" onclick="monitorEmails()">
+        <i class="fas fa-sync-alt"></i> Check New Emails
+    </button>
+    <div class="dropdown">
+        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            <i class="fas fa-filter"></i> Filter
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="?status=new">New</a></li>
+            <li><a class="dropdown-item" href="?status=processed">Processed</a></li>
+            <li><a class="dropdown-item" href="?status=responded">Responded</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="?">All</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Email Statistics -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+                <h5 class="card-title">{{ emails.total }}</h5>
+                <p class="card-text">Total Emails</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body text-center">
+                <h5 class="card-title">{{ emails.items | selectattr('response_sent') | list | length }}</h5>
+                <p class="card-text">Responded</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body text-center">
+                <h5 class="card-title">{{ emails.items | selectattr('has_complete_booking') | list | length }}</h5>
+                <p class="card-text">Complete Bookings</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body text-center">
+                <h5 class="card-title">{{ emails.items | map(attribute='processing_time_ms') | sum // emails.items | length if emails.items else 0 }}</h5>
+                <p class="card-text">Avg Processing (ms)</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Email List -->
+<div class="card">
+    <div class="card-header">
+        <h6 class="m-0 font-weight-bold text-primary">
+            <i class="fas fa-envelope"></i> Email History
+        </h6>
+    </div>
+    <div class="card-body">
+        {% if emails.items %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Subject</th>
+                        <th>Details</th>
+                        <th>Language</th>
+                        <th>Status</th>
+                        <th>Priority</th>
+                        <th>Pricing</th>
+                        <th>Processed</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for email in emails.items %}
+                    <tr class="priority-{{ email.priority }}">
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <div class="fw-bold">{{ email.sender_name or 'Unknown' }}</div>
+                                    <div class="text-muted small">{{ email.sender_email }}</div>
+                                    {% if email.customer %}
+                                    <div class="text-info small">
+                                        <i class="fas fa-history"></i> {{ email.customer.total_emails }} emails
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="fw-bold">{{ email.subject[:40] }}{% if email.subject|length > 40 %}...{% endif %}</div>
+                            <div class="text-muted small">ID: {{ email.gmail_id[:10] }}...</div>
+                        </td>
+                        <td>
+                            {% if email.has_complete_booking %}
+                                <span class="badge bg-success mb-1">Complete Booking</span><br>
+                                {% if email.guest_count %}
+                                <small><i class="fas fa-users"></i> {{ email.guest_count }} guests</small><br>
+                                {% endif %}
+                                {% if email.nights %}
+                                <small><i class="fas fa-calendar"></i> {{ email.nights }} nights</small><br>
+                                {% endif %}
+                                {% if email.room_type_requested %}
+                                <small><i class="fas fa-bed"></i> {{ email.room_type_requested.title() }}</small>
+                                {% endif %}
+                            {% else %}
+                                <span class="badge bg-warning mb-1">Incomplete Info</span><br>
+                                {% if email.missing_information %}
+                                    {% set missing = email.missing_information | from_json %}
+                                    <small class="text-muted">Missing: {{ missing | join(', ') }}</small>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="badge bg-info">{{ email.language_detected.upper() }}</span>
+                            {% if email.language_confidence %}
+                            <div class="text-muted small">{{ (email.language_confidence * 100) | round }}%</div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="email-status status-{{ email.status }}">{{ email.status.title() }}</span>
+                            {% if email.response_sent %}
+                            <div class="text-success small">
+                                <i class="fas fa-check"></i> Responded
+                            </div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="badge 
+                                {% if email.priority == 'urgent' %}bg-danger{% endif %}
+                                {% if email.priority == 'high' %}bg-warning{% endif %}
+                                {% if email.priority == 'normal' %}bg-success{% endif %}
+                                {% if email.priority == 'low' %}bg-secondary{% endif %}
+                            ">{{ email.priority.title() }}</span>
+                        </td>
+                        <td>
+                            {% if email.quoted_price_eur %}
+                            <div class="fw-bold">€{{ email.quoted_price_eur }}</div>
+                            {% if email.quoted_price_local %}
+                            <div class="text-muted small">{{ email.local_currency }} {{ email.quoted_price_local | round | int }}</div>
+                            {% endif %}
+                            {% else %}
+                            <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="small">{{ email.processed_at.strftime('%m/%d/%Y') }}</div>
+                            <div class="text-muted small">{{ email.processed_at.strftime('%H:%M') }}</div>
+                            {% if email.processing_time_ms %}
+                            <div class="text-info small">{{ email.processing_time_ms }}ms</div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="btn-group-vertical btn-group-sm">
+                                <a href="{{ url_for('email_detail', email_id=email.id) }}" 
+                                   class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                {% if not email.response_sent and user.can_send_emails %}
+                                <button class="btn btn-outline-success btn-sm" 
+                                        onclick="resendResponse({{ email.id }})">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination -->
+        {% if emails.pages > 1 %}
+        <nav aria-label="Email pagination">
+            <ul class="pagination justify-content-center">
+                {% if emails.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('emails', page=emails.prev_num) }}">Previous</a>
+                </li>
+                {% endif %}
+                
+                {% for page_num in emails.iter_pages() %}
+                    {% if page_num %}
+                        {% if page_num != emails.page %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('emails', page=page_num) }}">{{ page_num }}</a>
+                        </li>
+                        {% else %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ page_num }}</span>
+                        </li>
+                        {% endif %}
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if emails.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('emails', page=emails.next_num) }}">Next</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+        
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-inbox fa-4x text-muted mb-3"></i>
+            <h4 class="text-muted">No emails found</h4>
+            <p class="text-muted">Start monitoring your Gmail inbox to see processed emails here.</p>
+            <button class="btn btn-primary" onclick="monitorEmails()">
+                <i class="fas fa-sync-alt"></i> Check for New Emails
+            </button>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Monitor emails function
+async function monitorEmails() {
+    const button = document.querySelector('button[onclick="monitorEmails()"]');
+    const originalText = button.innerHTML;
+    
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking...';
+    button.disabled = true;
+    
+    try {
+        const response = await fetch('/api/monitor');
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            if (data.emails_processed > 0) {
+                alert(`Processed ${data.emails_processed} new emails!`);
+                location.reload();
+            } else {
+                alert('No new emails found.');
+            }
+        } else {
+            alert('Error: ' + data.error);
+        }
+    } catch (error) {
+        alert('Network error: ' + error.message);
+    } finally {
+        button.innerHTML = originalText;
+        button.disabled = false;
+    }
+}
+
+// Resend response function
+async function resendResponse(emailId) {
+    if (!confirm('Resend automatic response to this customer?')) return;
+    
+    try {
+        const response = await fetch(`/api/resend/${emailId}`, {method: 'POST'});
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            alert('Response sent successfully!');
+            location.reload();
+        } else {
+            alert('Error: ' + data.error);
+        }
+    } catch (error) {
+        alert('Network error: ' + error.message);
+    }
+}
+
+// Auto-refresh every 2 minutes
+setInterval(() => {
+    location.reload();
+}, 2 * 60 * 1000);
+</script>
+{% endblock %}

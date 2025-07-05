@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YourBookingHub.org - Otel Email Otomasyon SaaS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-hover { transition: all 0.3s ease-in-out; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .hero-gradient { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%); }
+        .smooth-scroll { scroll-behavior: smooth; }
+        .btn-transition { transition: all 0.3s ease-in-out; }
+        .btn-transition:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .fade-in { animation: fadeIn 0.6s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-envelope text-white"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold text-gray-900">YourBookingHub</span>
+                        <span class="text-blue-600">.org</span>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="#features" class="text-gray-700 hover:text-blue-600 btn-transition">Ozellikler</a>
+                    <a href="#pricing" class="text-gray-700 hover:text-blue-600 btn-transition">Uyelik</a>
+                    <a href="/admin" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 btn-transition">
+                        <i class="fas fa-user-shield mr-2"></i>Admin Panel
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient text-white pt-24 pb-16">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="mb-8">
+                <div class="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-robot text-white text-2xl"></i>
+                </div>
+                <h1 class="text-5xl font-bold mb-4">YourBookingHub.org</h1>
+                <h2 class="text-2xl mb-6 text-blue-100">Otel Email Otomasyon SaaS Platformu</h2>
+                <p class="text-xl mb-8 max-w-3xl mx-auto text-blue-50">
+                    Otellerin rezervasyon emaillerini yapay zeka ile otomatiklestiren profesyonel SaaS cozumu.
+                </p>
+                <div class="flex justify-center space-x-4">
+                    <a href="#demo" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100">
+                        <i class="fas fa-play mr-2"></i>Demo Dene
+                    </a>
+                    <a href="#pricing" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600">
+                        <i class="fas fa-shopping-cart mr-2"></i>Satin Al
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8 text-center">
+                <div>
+                    <div class="text-4xl font-bold text-blue-600 mb-2">5</div>
+                    <div class="text-gray-600">Dil Destegi</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-bold text-blue-600 mb-2">30s</div>
+                    <div class="text-gray-600">Email Kontrolu</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-bold text-blue-600 mb-2">AI</div>
+                    <div class="text-gray-600">Powered Analiz</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-bold text-blue-600 mb-2">24/7</div>
+                    <div class="text-gray-600">Otomatik Sistem</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Platformun Ozellikleri</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Her otel icin ozellestirildmis, markali email otomasyon sistemi
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="card-hover bg-white p-8 rounded-xl shadow-lg">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-hotel text-blue-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Multi-Tenant Sistem</h3>
+                    <p class="text-gray-600">
+                        Her otel icin ayri hesap, kendi branding'i ve ozellestirildmis email template'leri.
+                    </p>
+                </div>
+                
+                <div class="card-hover bg-white p-8 rounded-xl shadow-lg">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-brain text-green-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">AI Powered Analiz</h3>
+                    <p class="text-gray-600">
+                        OpenAI GPT-4o ile emailleri analiz eder. Misafir sayisi, gece sayisi, oda tipi otomatik cikarir.
+                    </p>
+                </div>
+                
+                <div class="card-hover bg-white p-8 rounded-xl shadow-lg">
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-language text-purple-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">5 Dil Destegi</h3>
+                    <p class="text-gray-600">
+                        Turkce, Ingilizce, Almanca, Fransizca ve Rusca dillerinde otomatik dil tespiti.
+                    </p>
+                </div>
+                
+                <div class="card-hover bg-white p-8 rounded-xl shadow-lg">
+                    <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-envelope-open-text text-orange-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Gmail Entegrasyonu</h3>
+                    <p class="text-gray-600">
+                        Otelin Gmail hesabini 30 saniyede bir kontrol eder. Yeni rezervasyon taleplerini otomatik isler.
+                    </p>
+                </div>
+                
+                <div class="card-hover bg-white p-8 rounded-xl shadow-lg">
+                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-chart-line text-red-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Detayli Dashboard</h3>
+                    <p class="text-gray-600">
+                        Gercek zamanli email istatistikleri, musteri analizleri, gelir raporlari.
+                    </p>
+                </div>
+                
+                <div class="card-hover bg-white p-8 rounded-xl shadow-lg">
+                    <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-cog text-indigo-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Tam Kontrol</h3>
+                    <p class="text-gray-600">
+                        Oteller sistemi baslatabilir/durdurabilir, ayarlari degistirebilir.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Membership Section -->
+    <section id="pricing" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Uyelik Sistemi</h2>
+                <p class="text-xl text-gray-600">Tek uyelik seviyesi ile sinirsiz erisim</p>
+            </div>
+            
+            <div class="max-w-md mx-auto">
+                <div class="bg-white p-8 rounded-xl shadow-lg border-2 border-blue-500 relative">
+                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                        <span class="bg-blue-500 text-white px-4 py-1 rounded-full text-sm">Sinirsiz Erisim</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4 text-center">Premium Uyelik</h3>
+                    <div class="text-center mb-6">
+                        <div class="text-lg text-gray-600">Fiyat bilgisi icin iletisime gecin</div>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center"><i class="fas fa-check text-blue-500 mr-3"></i>Sinirsiz email isleme</li>
+                        <li class="flex items-center"><i class="fas fa-check text-blue-500 mr-3"></i>5 dil destegi (TR/EN/DE/FR/RU)</li>
+                        <li class="flex items-center"><i class="fas fa-check text-blue-500 mr-3"></i>AI destekli akilli yanitlar</li>
+                        <li class="flex items-center"><i class="fas fa-check text-blue-500 mr-3"></i>Gmail API entegrasyonu</li>
+                        <li class="flex items-center"><i class="fas fa-check text-blue-500 mr-3"></i>Ozel otel dashboard'u</li>
+                        <li class="flex items-center"><i class="fas fa-check text-blue-500 mr-3"></i>Musteri takip sistemi</li>
+                        <li class="flex items-center"><i class="fas fa-check text-blue-500 mr-3"></i>7/24 teknik destek</li>
+                        <li class="flex items-center"><i class="fas fa-check text-blue-500 mr-3"></i>Ozel branding ve logo</li>
+                    </ul>
+                    <button onclick="window.location.href='mailto:poyraz100000@gmail.com?subject=YourBookingHub Uyelik Talebi'" 
+                            class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-all duration-300">
+                        <i class="fas fa-envelope mr-2"></i>Iletisime Gec
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-envelope text-white"></i>
+                        </div>
+                        <span class="text-xl font-bold">YourBookingHub.org</span>
+                    </div>
+                    <p class="text-gray-400">
+                        Otel email otomasyon SaaS platformu. Otellerin rezervasyon surecini tamamen otomatiklestirin.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Iletisim Bilgileri</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><i class="fas fa-envelope mr-2"></i>poyraz100000@gmail.com</li>
+                        <li><i class="fas fa-phone mr-2"></i>+90 555 555 55 55</li>
+                        <li><i class="fas fa-globe mr-2"></i>www.yourbookinghub.org</li>
+                        <li><i class="fas fa-map-marker-alt mr-2"></i>Istanbul, Turkiye</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Satin Alma Sureci</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Beni arayin, ihtiyaclarinizi anlayalim</li>
+                        <li>Sizin icin ozel hesap acacagim</li>
+                        <li>Gmail entegrasyonu ve branding ayarlari</li>
+                        <li>Sistem aktif, emaillerinizi islemeye basliyor</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Sistem Ozellikleri</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Gercek email analizi</li>
+                        <li>5 dilde yanit</li>
+                        <li>Dinamik fiyatlama</li>
+                        <li>Canli istatistikler</li>
+                        <li>Dashboard kontrolleri</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 YourBookingHub.org - Otel Email Otomasyon SaaS Platformu. Tum haklari saklidir.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

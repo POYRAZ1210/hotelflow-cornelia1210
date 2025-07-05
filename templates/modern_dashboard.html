@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Dashboard - Ultra Modern SaaS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-robot text-3xl text-blue-600"></i>
+                        <span class="text-2xl font-bold text-gray-900" id="hotelName">Hotel Dashboard</span>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button onclick="monitorEmails()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                        <i class="fas fa-sync-alt mr-2"></i>Check New Emails
+                    </button>
+                    
+                    <div class="flex items-center space-x-2 text-gray-700">
+                        <i class="fas fa-user-circle text-2xl"></i>
+                        <span id="userName">Admin User</span>
+                    </div>
+                    
+                    <button onclick="logout()" class="text-gray-500 hover:text-gray-700 transition">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
+            <p class="text-gray-600">Monitor your hotel's email automation performance</p>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600 uppercase tracking-wide">Total Emails</p>
+                        <p class="text-3xl font-bold text-gray-900" id="totalEmails">0</p>
+                    </div>
+                    <div class="p-3 bg-blue-100 rounded-full">
+                        <i class="fas fa-envelope text-2xl text-blue-600"></i>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <span class="text-green-600 text-sm font-medium">
+                        <i class="fas fa-arrow-up mr-1"></i>Processing
+                    </span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600 uppercase tracking-wide">Today's Emails</p>
+                        <p class="text-3xl font-bold text-gray-900" id="todayEmails">0</p>
+                    </div>
+                    <div class="p-3 bg-green-100 rounded-full">
+                        <i class="fas fa-calendar-day text-2xl text-green-600"></i>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <span class="text-green-600 text-sm font-medium">
+                        <i class="fas fa-clock mr-1"></i>Real-time
+                    </span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600 uppercase tracking-wide">Response Rate</p>
+                        <p class="text-3xl font-bold text-gray-900" id="responseRate">0%</p>
+                    </div>
+                    <div class="p-3 bg-yellow-100 rounded-full">
+                        <i class="fas fa-reply text-2xl text-yellow-600"></i>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <span class="text-green-600 text-sm font-medium">
+                        <i class="fas fa-robot mr-1"></i>AI Powered
+                    </span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600 uppercase tracking-wide">Total Customers</p>
+                        <p class="text-3xl font-bold text-gray-900" id="totalCustomers">0</p>
+                    </div>
+                    <div class="p-3 bg-purple-100 rounded-full">
+                        <i class="fas fa-users text-2xl text-purple-600"></i>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <span class="text-green-600 text-sm font-medium">
+                        <i class="fas fa-chart-line mr-1"></i>Growing
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts and Recent Activity -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Email Activity Chart -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Email Activity</h3>
+                <canvas id="emailChart" width="400" height="200"></canvas>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+                <div class="space-y-4">
+                    <button onclick="monitorEmails()" class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition text-left">
+                        <i class="fas fa-sync-alt mr-3"></i>
+                        <span class="font-medium">Monitor New Emails</span>
+                        <p class="text-blue-200 text-sm mt-1">Check Gmail for new booking requests</p>
+                    </button>
+                    
+                    <button onclick="viewEmails()" class="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 transition text-left">
+                        <i class="fas fa-envelope-open mr-3"></i>
+                        <span class="font-medium">View All Emails</span>
+                        <p class="text-green-200 text-sm mt-1">Manage processed emails and responses</p>
+                    </button>
+                    
+                    <button onclick="viewCustomers()" class="w-full bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700 transition text-left">
+                        <i class="fas fa-users mr-3"></i>
+                        <span class="font-medium">Customer Management</span>
+                        <p class="text-purple-200 text-sm mt-1">View customer profiles and history</p>
+                    </button>
+                    
+                    <a href="/api/docs" target="_blank" class="w-full bg-gray-600 text-white py-3 px-4 rounded-lg hover:bg-gray-700 transition text-left block">
+                        <i class="fas fa-code mr-3"></i>
+                        <span class="font-medium">API Documentation</span>
+                        <p class="text-gray-200 text-sm mt-1">Explore the REST API endpoints</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Emails -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-semibold text-gray-900">Recent Emails</h3>
+                <button onclick="viewEmails()" class="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                    View All <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+            
+            <div id="recentEmailsContainer">
+                <div class="text-center py-8 text-gray-500">
+                    <i class="fas fa-inbox text-4xl mb-3"></i>
+                    <p>No emails processed yet</p>
+                    <p class="text-sm">Click "Check New Emails" to start monitoring</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Status -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">System Status</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600">Email Monitoring</span>
+                        <span class="text-green-600 flex items-center">
+                            <i class="fas fa-check-circle mr-2"></i>Active
+                        </span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600">AI Processing</span>
+                        <span class="text-green-600 flex items-center">
+                            <i class="fas fa-check-circle mr-2"></i>Online
+                        </span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600">Gmail Integration</span>
+                        <span class="text-yellow-600 flex items-center">
+                            <i class="fas fa-exclamation-circle mr-2"></i>Setup Required
+                        </span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600">Database</span>
+                        <span class="text-green-600 flex items-center">
+                            <i class="fas fa-check-circle mr-2"></i>Connected
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Hotel Information</h3>
+                <div class="space-y-3" id="hotelInfo">
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600">Hotel Name</span>
+                        <span class="font-medium">Loading...</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600">Domain</span>
+                        <span class="font-medium">Loading...</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600">Subscription</span>
+                        <span class="text-green-600 font-medium">Active</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600">Plan</span>
+                        <span class="font-medium">Professional</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-8 text-center">
+            <i class="fas fa-spinner fa-spin text-4xl text-blue-600 mb-4"></i>
+            <p class="text-lg font-medium">Processing...</p>
+        </div>
+    </div>
+
+    <!-- Message Container -->
+    <div id="messageContainer" class="fixed top-4 right-4 z-50"></div>
+
+    <script>
+        let dashboardData = {};
+        
+        // Initialize dashboard
+        window.addEventListener('load', function() {
+            checkAuth();
+            loadDashboardData();
+            initializeChart();
+        });
+        
+        function checkAuth() {
+            const token = localStorage.getItem('access_token');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            const hotel = JSON.parse(localStorage.getItem('hotel') || '{}');
+            
+            if (!token) {
+                window.location.href = '/login';
+                return;
+            }
+            
+            // Update UI with user/hotel info
+            if (user.full_name) {
+                document.getElementById('userName').textContent = user.full_name;
+            }
+            if (hotel.name) {
+                document.getElementById('hotelName').textContent = hotel.name;
+            }
+        }
+        
+        async function loadDashboardData() {
+            try {
+                const response = await fetch('/api/dashboard');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    dashboardData = data;
+                    updateDashboard(data);
+                } else {
+                    showMessage('Failed to load dashboard data', 'error');
+                }
+            } catch (error) {
+                console.error('Dashboard load error:', error);
+                showMessage('Network error loading dashboard', 'error');
+            }
+        }
+        
+        function updateDashboard(data) {
+            document.getElementById('totalEmails').textContent = data.total_emails;
+            document.getElementById('todayEmails').textContent = data.emails_today;
+            document.getElementById('responseRate').textContent = data.response_rate + '%';
+            document.getElementById('totalCustomers').textContent = data.total_customers;
+            
+            // Update recent emails
+            const container = document.getElementById('recentEmailsContainer');
+            if (data.recent_emails && data.recent_emails.length > 0) {
+                container.innerHTML = data.recent_emails.map(email => `
+                    <div class="border-b border-gray-200 py-4 last:border-b-0">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-envelope text-blue-600"></i>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-900">${email.sender_name || 'Unknown'}</p>
+                                        <p class="text-sm text-gray-600">${email.sender_email}</p>
+                                    </div>
+                                </div>
+                                <p class="text-sm text-gray-800 mt-2">${email.subject || 'No subject'}</p>
+                            </div>
+                            <div class="text-right">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                    email.has_complete_booking ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                                }">
+                                    ${email.has_complete_booking ? 'Complete' : 'Incomplete'}
+                                </span>
+                                <p class="text-xs text-gray-500 mt-1">
+                                    ${email.language_detected ? email.language_detected.toUpperCase() : 'Unknown'}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+        
+        function initializeChart() {
+            const ctx = document.getElementById('emailChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Emails Processed',
+                        data: [12, 19, 8, 15, 22, 18, 25],
+                        borderColor: 'rgb(59, 130, 246)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.1,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+        
+        async function monitorEmails() {
+            const button = event.target;
+            const originalText = button.innerHTML;
+            
+            button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Checking...';
+            button.disabled = true;
+            
+            try {
+                const response = await fetch('/api/monitor-emails', {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showMessage(data.message, 'success');
+                    // Reload dashboard data
+                    await loadDashboardData();
+                } else {
+                    showMessage('Error: ' + data.detail, 'error');
+                }
+            } catch (error) {
+                console.error('Monitor error:', error);
+                showMessage('Network error during monitoring', 'error');
+            } finally {
+                button.innerHTML = originalText;
+                button.disabled = false;
+            }
+        }
+        
+        function viewEmails() {
+            // For now, show API data
+            fetch('/api/emails')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        showMessage(`Found ${data.emails.length} emails`, 'success');
+                        console.log('Emails:', data.emails);
+                    }
+                })
+                .catch(error => {
+                    console.error('Email fetch error:', error);
+                    showMessage('Error fetching emails', 'error');
+                });
+        }
+        
+        function viewCustomers() {
+            showMessage('Customer management coming soon', 'info');
+        }
+        
+        function logout() {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('hotel');
+            window.location.href = '/login';
+        }
+        
+        function showMessage(message, type) {
+            const container = document.getElementById('messageContainer');
+            const messageDiv = document.createElement('div');
+            
+            const colors = {
+                success: 'bg-green-500',
+                error: 'bg-red-500',
+                info: 'bg-blue-500'
+            };
+            
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                info: 'fa-info-circle'
+            };
+            
+            messageDiv.className = `${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg mb-2 flex items-center transform transition-all duration-300 translate-x-full`;
+            messageDiv.innerHTML = `
+                <i class="fas ${icons[type]} mr-2"></i>
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()" class="ml-4 text-white hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            container.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.classList.remove('translate-x-full');
+            }, 100);
+            
+            setTimeout(() => {
+                if (messageDiv.parentElement) {
+                    messageDiv.classList.add('translate-x-full');
+                    setTimeout(() => {
+                        if (messageDiv.parentElement) {
+                            messageDiv.remove();
+                        }
+                    }, 300);
+                }
+            }, 5000);
+        }
+        
+        // Auto-refresh dashboard every 30 seconds
+        setInterval(loadDashboardData, 30000);
+    </script>
+</body>
+</html>

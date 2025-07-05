@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cornelia Diamond Resort & Spa - AI Hotel Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .glass-effect { backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.1); }
+        .hero-bg { background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%23667eea" width="1200" height="800"/><g fill-opacity="0.1"><circle cx="200" cy="200" r="100"/><circle cx="800" cy="300" r="150"/><circle cx="1000" cy="500" r="120"/></g></svg>'); }
+        .feature-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .feature-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
+        .pulse-ring { animation: pulse-ring 1.25s cubic-bezier(0.215, 0.61, 0.355, 1) infinite; }
+        @keyframes pulse-ring { 0% { transform: scale(0.33); } 40%, 50% { opacity: 0; } 100% { opacity: 0; transform: scale(1.33); } }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold text-gray-900">
+                            <i class="fas fa-hotel text-blue-600 mr-2"></i>
+                            Cornelia Diamond Resort & Spa
+                        </h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <div class="absolute -inset-1 bg-green-500 rounded-full pulse-ring"></div>
+                        <div class="relative bg-green-500 rounded-full w-3 h-3"></div>
+                    </div>
+                    <span class="text-sm text-gray-700">
+                        <i class="fas fa-circle text-green-500 mr-1"></i>
+                        System Online
+                    </span>
+                    <a href="/login" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-300">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Login
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg min-h-screen flex items-center justify-center text-center px-4 pt-16">
+        <div class="max-w-4xl mx-auto">
+            <div class="animate-float mb-8">
+                <div class="inline-flex items-center justify-center w-24 h-24 bg-white rounded-full shadow-lg mb-6">
+                    <i class="fas fa-robot text-4xl text-blue-600"></i>
+                </div>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-bold text-white mb-6">
+                AI-Powered Hotel Management
+            </h1>
+            
+            <p class="text-xl md:text-2xl text-blue-100 mb-8 max-w-3xl mx-auto">
+                Revolutionary email automation system with intelligent room inventory management, 
+                multi-language support, and professional guest communication.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/login" class="glass-effect hover:bg-white hover:bg-opacity-20 text-white font-semibold py-4 px-8 rounded-lg transition duration-300 border border-white border-opacity-20">
+                    <i class="fas fa-rocket mr-2"></i>
+                    Launch Dashboard
+                </a>
+                <a href="#features" class="bg-white bg-opacity-10 hover:bg-opacity-20 text-white font-semibold py-4 px-8 rounded-lg transition duration-300 border border-white border-opacity-30">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    Learn More
+                </a>
+            </div>
+            
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 max-w-2xl mx-auto">
+                <div class="glass-effect rounded-lg p-4 border border-white border-opacity-20">
+                    <div class="text-2xl font-bold text-white">24/7</div>
+                    <div class="text-sm text-blue-100">Email Monitoring</div>
+                </div>
+                <div class="glass-effect rounded-lg p-4 border border-white border-opacity-20">
+                    <div class="text-2xl font-bold text-white">5</div>
+                    <div class="text-sm text-blue-100">Languages</div>
+                </div>
+                <div class="glass-effect rounded-lg p-4 border border-white border-opacity-20">
+                    <div class="text-2xl font-bold text-white">100</div>
+                    <div class="text-sm text-blue-100">Rooms Managed</div>
+                </div>
+                <div class="glass-effect rounded-lg p-4 border border-white border-opacity-20">
+                    <div class="text-2xl font-bold text-white">AI</div>
+                    <div class="text-sm text-blue-100">Powered</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">
+                    Complete Hotel Management Solution
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Advanced features designed to automate your hotel operations, 
+                    improve guest satisfaction, and maximize revenue.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Email Automation -->
+                <div class="feature-card bg-white rounded-xl shadow-lg p-8 border border-gray-200">
+                    <div class="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-envelope-open-text text-2xl text-blue-600"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Smart Email Automation</h3>
+                    <p class="text-gray-600 mb-6">
+                        AI-powered email processing with automatic language detection, 
+                        booking analysis, and professional response generation.
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Gmail API Integration</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>OpenAI GPT-4o Analysis</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Real-time Monitoring</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Professional Signatures</li>
+                    </ul>
+                </div>
+
+                <!-- Room Inventory -->
+                <div class="feature-card bg-white rounded-xl shadow-lg p-8 border border-gray-200">
+                    <div class="w-16 h-16 bg-green-100 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-bed text-2xl text-green-600"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Dynamic Room Management</h3>
+                    <p class="text-gray-600 mb-6">
+                        Advanced inventory system with automatic room allocation, 
+                        alternative suggestions, and real-time availability tracking.
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>25 Rooms per Type</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Auto-Decrease on Booking</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Alternative Suggestions</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Low Inventory Alerts</li>
+                    </ul>
+                </div>
+
+                <!-- Multi-Language -->
+                <div class="feature-card bg-white rounded-xl shadow-lg p-8 border border-gray-200">
+                    <div class="w-16 h-16 bg-purple-100 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-language text-2xl text-purple-600"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Multi-Language Support</h3>
+                    <p class="text-gray-600 mb-6">
+                        Communicate with guests in their native language with 
+                        automatic detection and culturally appropriate responses.
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><i class="fas fa-check text-purple-500 mr-2"></i>🇹🇷 Turkish</li>
+                        <li><i class="fas fa-check text-purple-500 mr-2"></i>🇺🇸 English</li>
+                        <li><i class="fas fa-check text-purple-500 mr-2"></i>🇩🇪 German</li>
+                        <li><i class="fas fa-check text-purple-500 mr-2"></i>🇫🇷 French & 🇷🇺 Russian</li>
+                    </ul>
+                </div>
+
+                <!-- Pricing Calculator -->
+                <div class="feature-card bg-white rounded-xl shadow-lg p-8 border border-gray-200">
+                    <div class="w-16 h-16 bg-yellow-100 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-calculator text-2xl text-yellow-600"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Advanced Pricing Engine</h3>
+                    <p class="text-gray-600 mb-6">
+                        Sophisticated pricing calculations with seasonal rates, 
+                        currency conversion, and automatic discount application.
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><i class="fas fa-check text-yellow-500 mr-2"></i>Seasonal Adjustments</li>
+                        <li><i class="fas fa-check text-yellow-500 mr-2"></i>Live Exchange Rates</li>
+                        <li><i class="fas fa-check text-yellow-500 mr-2"></i>Multi-night Discounts</li>
+                        <li><i class="fas fa-check text-yellow-500 mr-2"></i>EUR & TL Pricing</li>
+                    </ul>
+                </div>
+
+                <!-- Customer CRM -->
+                <div class="feature-card bg-white rounded-xl shadow-lg p-8 border border-gray-200">
+                    <div class="w-16 h-16 bg-red-100 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-users text-2xl text-red-600"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Customer Relationship Management</h3>
+                    <p class="text-gray-600 mb-6">
+                        Track guest history, preferences, and interactions to provide 
+                        personalized service and improve guest satisfaction.
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><i class="fas fa-check text-red-500 mr-2"></i>Guest History Tracking</li>
+                        <li><i class="fas fa-check text-red-500 mr-2"></i>VIP Status Management</li>
+                        <li><i class="fas fa-check text-red-500 mr-2"></i>Personalized Responses</li>
+                        <li><i class="fas fa-check text-red-500 mr-2"></i>Interaction Analytics</li>
+                    </ul>
+                </div>
+
+                <!-- Analytics Dashboard -->
+                <div class="feature-card bg-white rounded-xl shadow-lg p-8 border border-gray-200">
+                    <div class="w-16 h-16 bg-indigo-100 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-chart-line text-2xl text-indigo-600"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Real-time Analytics</h3>
+                    <p class="text-gray-600 mb-6">
+                        Comprehensive dashboard with real-time statistics, 
+                        performance metrics, and business intelligence insights.
+                    </p>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><i class="fas fa-check text-indigo-500 mr-2"></i>Live Dashboard</li>
+                        <li><i class="fas fa-check text-indigo-500 mr-2"></i>Occupancy Charts</li>
+                        <li><i class="fas fa-check text-indigo-500 mr-2"></i>Email Analytics</li>
+                        <li><i class="fas fa-check text-indigo-500 mr-2"></i>Performance Metrics</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Stack -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">
+                    Built with Modern Technology
+                </h2>
+                <p class="text-xl text-gray-600">
+                    Powered by the latest AI and cloud technologies for maximum reliability and performance.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-white rounded-lg shadow-lg flex items-center justify-center mx-auto mb-4">
+                        <i class="fab fa-python text-3xl text-blue-600"></i>
+                    </div>
+                    <h4 class="font-semibold text-gray-900">FastAPI</h4>
+                    <p class="text-sm text-gray-600">Modern Python Backend</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-white rounded-lg shadow-lg flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-robot text-3xl text-green-600"></i>
+                    </div>
+                    <h4 class="font-semibold text-gray-900">OpenAI GPT-4o</h4>
+                    <p class="text-sm text-gray-600">AI Email Analysis</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-white rounded-lg shadow-lg flex items-center justify-center mx-auto mb-4">
+                        <i class="fab fa-google text-3xl text-red-600"></i>
+                    </div>
+                    <h4 class="font-semibold text-gray-900">Gmail API</h4>
+                    <p class="text-sm text-gray-600">Email Integration</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-white rounded-lg shadow-lg flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-database text-3xl text-purple-600"></i>
+                    </div>
+                    <h4 class="font-semibold text-gray-900">PostgreSQL</h4>
+                    <p class="text-sm text-gray-600">Reliable Database</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section class="py-20 gradient-bg">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl font-bold text-white mb-6">
+                Experience the Future of Hotel Management
+            </h2>
+            <p class="text-xl text-blue-100 mb-8">
+                Try our demo system and see how AI can transform your hotel operations.
+            </p>
+            
+            <div class="bg-white bg-opacity-10 rounded-lg p-8 mb-8 border border-white border-opacity-20">
+                <h3 class="text-2xl font-bold text-white mb-4">Demo Access</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-white">
+                    <div>
+                        <div class="font-semibold">Domain</div>
+                        <div class="text-blue-200">cornelia</div>
+                    </div>
+                    <div>
+                        <div class="font-semibold">Username</div>
+                        <div class="text-blue-200">admin</div>
+                    </div>
+                    <div>
+                        <div class="font-semibold">Password</div>
+                        <div class="text-blue-200">admin123</div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="/login" class="inline-flex items-center bg-white text-blue-600 font-bold py-4 px-8 rounded-lg hover:bg-blue-50 transition duration-300 shadow-lg">
+                <i class="fas fa-play mr-2"></i>
+                Launch Demo Dashboard
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4">
+                        <i class="fas fa-hotel text-blue-400 mr-2"></i>
+                        Cornelia Diamond Resort & Spa
+                    </h3>
+                    <p class="text-gray-400">
+                        Revolutionary AI-powered hotel management system designed to 
+                        automate operations and enhance guest experiences.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Features</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>Email Automation</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>Room Management</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>Multi-Language Support</li>
+                        <li><i class="fas fa-check text-green-400 mr-2"></i>Real-time Analytics</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">System Status</h4>
+                    <div class="space-y-2">
+                        <div class="flex items-center text-green-400">
+                            <div class="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+                            <span>API Server Online</span>
+                        </div>
+                        <div class="flex items-center text-green-400">
+                            <div class="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+                            <span>AI Services Active</span>
+                        </div>
+                        <div class="flex items-center text-green-400">
+                            <div class="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+                            <span>Email Monitor Running</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Cornelia Diamond Resort & Spa. Advanced Hotel Management System.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollToTop" class="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white w-12 h-12 rounded-full shadow-lg opacity-0 pointer-events-none transition-all duration-300">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Scroll to top button
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+        
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.remove('opacity-0', 'pointer-events-none');
+            } else {
+                scrollToTopBtn.classList.add('opacity-0', 'pointer-events-none');
+            }
+        });
+
+        scrollToTopBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fadeInUp');
+                }
+            });
+        }, observerOptions);
+
+        // Observe feature cards
+        document.querySelectorAll('.feature-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Add fadeInUp animation class
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            .animate-fadeInUp {
+                animation: fadeInUp 0.6s ease-out forwards;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

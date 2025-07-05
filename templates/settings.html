@@ -1,0 +1,420 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - {{ hotel.name }}{% endblock %}
+
+{% block page_title %}Hotel Settings{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <!-- Hotel Information -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-hotel"></i> Hotel Information
+                </h6>
+            </div>
+            <div class="card-body">
+                <form id="hotelInfoForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Hotel Name</label>
+                                <input type="text" class="form-control" name="name" value="{{ hotel.name }}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Domain</label>
+                                <input type="text" class="form-control" name="domain" value="{{ hotel.domain }}" required readonly>
+                                <div class="form-text">Cannot be changed after setup</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Email Address</label>
+                                <input type="email" class="form-control" name="email_address" value="{{ hotel.email_address }}" required>
+                                <div class="form-text">Gmail address to monitor</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Phone</label>
+                                <input type="text" class="form-control" name="phone" value="{{ hotel.phone or '' }}">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Website</label>
+                        <input type="url" class="form-control" name="website" value="{{ hotel.website or '' }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Address</label>
+                        <textarea class="form-control" name="address" rows="3">{{ hotel.address or '' }}</textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Pricing Settings -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-dollar-sign"></i> Pricing Configuration
+                </h6>
+            </div>
+            <div class="card-body">
+                <form id="pricingForm">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label">Base Currency</label>
+                                <select class="form-select" name="base_currency">
+                                    <option value="EUR" {{ 'selected' if hotel.base_currency == 'EUR' }}>EUR (€)</option>
+                                    <option value="USD" {{ 'selected' if hotel.base_currency == 'USD' }}>USD ($)</option>
+                                    <option value="TRY" {{ 'selected' if hotel.base_currency == 'TRY' }}>TRY (₺)</option>
+                                    <option value="GBP" {{ 'selected' if hotel.base_currency == 'GBP' }}>GBP (£)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label">Default Language</label>
+                                <select class="form-select" name="default_language">
+                                    <option value="en" {{ 'selected' if hotel.default_language == 'en' }}>English</option>
+                                    <option value="tr" {{ 'selected' if hotel.default_language == 'tr' }}>Turkish</option>
+                                    <option value="de" {{ 'selected' if hotel.default_language == 'de' }}>German</option>
+                                    <option value="fr" {{ 'selected' if hotel.default_language == 'fr' }}>French</option>
+                                    <option value="ru" {{ 'selected' if hotel.default_language == 'ru' }}>Russian</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label">Timezone</label>
+                                <select class="form-select" name="timezone">
+                                    <option value="UTC" {{ 'selected' if hotel.timezone == 'UTC' }}>UTC</option>
+                                    <option value="Europe/Istanbul" {{ 'selected' if hotel.timezone == 'Europe/Istanbul' }}>Istanbul</option>
+                                    <option value="Europe/London" {{ 'selected' if hotel.timezone == 'Europe/London' }}>London</option>
+                                    <option value="Europe/Berlin" {{ 'selected' if hotel.timezone == 'Europe/Berlin' }}>Berlin</option>
+                                    <option value="Europe/Paris" {{ 'selected' if hotel.timezone == 'Europe/Paris' }}>Paris</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h6 class="mt-4 mb-3">Room Prices (per night)</h6>
+                    {% set base_prices = hotel.base_prices | from_json if hotel.base_prices else {'standard': 300, 'deluxe': 450, 'suite': 600, 'villa': 800, 'presidential': 1200} %}
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Standard Room</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">{{ hotel.base_currency }}</span>
+                                    <input type="number" class="form-control" name="price_standard" value="{{ base_prices.standard }}" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Deluxe Room</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">{{ hotel.base_currency }}</span>
+                                    <input type="number" class="form-control" name="price_deluxe" value="{{ base_prices.deluxe }}" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Suite</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">{{ hotel.base_currency }}</span>
+                                    <input type="number" class="form-control" name="price_suite" value="{{ base_prices.suite }}" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Villa</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">{{ hotel.base_currency }}</span>
+                                    <input type="number" class="form-control" name="price_villa" value="{{ base_prices.villa }}" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Presidential Suite</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">{{ hotel.base_currency }}</span>
+                                    <input type="number" class="form-control" name="price_presidential" value="{{ base_prices.presidential }}" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Pricing
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Gmail Integration -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-envelope"></i> Gmail Integration
+                </h6>
+            </div>
+            <div class="card-body">
+                {% if hotel.gmail_token %}
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle"></i> Gmail is connected and ready
+                </div>
+                
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>Connected Account:</strong> {{ hotel.email_address }}
+                    </div>
+                    <button class="btn btn-outline-danger" onclick="disconnectGmail()">
+                        <i class="fas fa-unlink"></i> Disconnect
+                    </button>
+                </div>
+                {% else %}
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i> Gmail is not connected
+                </div>
+                
+                <p class="mb-3">To enable automatic email monitoring, you need to connect your Gmail account.</p>
+                
+                <button class="btn btn-primary" onclick="connectGmail()">
+                    <i class="fas fa-link"></i> Connect Gmail
+                </button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <!-- Subscription Info -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-credit-card"></i> Subscription
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-3">
+                    <h4 class="text-primary">{{ hotel.subscription_plan.title() }}</h4>
+                    <span class="badge bg-{{ 'success' if hotel.subscription_status == 'active' else 'danger' }}">
+                        {{ hotel.subscription_status.title() }}
+                    </span>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                        <span>Email Usage</span>
+                        <span>{{ hotel.emails_used_this_month }}/{{ hotel.monthly_email_limit }}</span>
+                    </div>
+                    <div class="progress mt-1">
+                        <div class="progress-bar" style="width: {{ (hotel.emails_used_this_month / hotel.monthly_email_limit * 100) if hotel.monthly_email_limit > 0 else 0 }}%"></div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-outline-primary w-100">
+                    <i class="fas fa-credit-card"></i> Manage Subscription
+                </button>
+            </div>
+        </div>
+        
+        <!-- Team Members -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-users"></i> Team Members
+                </h6>
+            </div>
+            <div class="card-body">
+                {% for team_user in hotel.users %}
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <div class="fw-bold">{{ team_user.full_name or team_user.username }}</div>
+                        <div class="text-muted small">{{ team_user.role.title() }}</div>
+                    </div>
+                    {% if team_user.id != user.id %}
+                    <button class="btn btn-sm btn-outline-danger" onclick="removeUser({{ team_user.id }})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                
+                <button class="btn btn-outline-primary btn-sm w-100 mt-2" onclick="inviteUser()">
+                    <i class="fas fa-plus"></i> Invite User
+                </button>
+            </div>
+        </div>
+        
+        <!-- System Status -->
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-cog"></i> System Status
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Email Monitoring</span>
+                    <span class="text-{{ 'success' if hotel.gmail_token else 'danger' }}">
+                        <i class="fas fa-{{ 'check' if hotel.gmail_token else 'times' }}-circle"></i>
+                        {{ 'Active' if hotel.gmail_token else 'Inactive' }}
+                    </span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>AI Processing</span>
+                    <span class="text-success">
+                        <i class="fas fa-check-circle"></i> Active
+                    </span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span>Last Check</span>
+                    <span class="text-muted">{{ moment().format('HH:mm') }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Save hotel information
+document.getElementById('hotelInfoForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+    
+    try {
+        const response = await fetch('/api/hotel/update', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (result.status === 'success') {
+            alert('Hotel information updated successfully!');
+        } else {
+            alert('Error: ' + result.error);
+        }
+    } catch (error) {
+        alert('Network error: ' + error.message);
+    }
+});
+
+// Save pricing settings
+document.getElementById('pricingForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+    
+    try {
+        const response = await fetch('/api/hotel/pricing', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (result.status === 'success') {
+            alert('Pricing updated successfully!');
+        } else {
+            alert('Error: ' + result.error);
+        }
+    } catch (error) {
+        alert('Network error: ' + error.message);
+    }
+});
+
+// Connect Gmail
+async function connectGmail() {
+    try {
+        const response = await fetch('/api/gmail/connect', {
+            method: 'POST'
+        });
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            window.open(data.auth_url, 'gmail_auth', 'width=600,height=600');
+        } else {
+            alert('Error: ' + data.error);
+        }
+    } catch (error) {
+        alert('Network error: ' + error.message);
+    }
+}
+
+// Disconnect Gmail
+async function disconnectGmail() {
+    if (!confirm('Disconnect Gmail? This will stop email monitoring.')) return;
+    
+    try {
+        const response = await fetch('/api/gmail/disconnect', {
+            method: 'POST'
+        });
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            alert('Gmail disconnected successfully');
+            location.reload();
+        } else {
+            alert('Error: ' + data.error);
+        }
+    } catch (error) {
+        alert('Network error: ' + error.message);
+    }
+}
+
+// Invite user
+function inviteUser() {
+    const email = prompt('Enter email address to invite:');
+    if (!email) return;
+    
+    // Implementation for user invitation
+    alert('User invitation functionality will be implemented');
+}
+
+// Remove user
+function removeUser(userId) {
+    if (!confirm('Remove this user from your team?')) return;
+    
+    // Implementation for user removal
+    alert('User removal functionality will be implemented');
+}
+</script>
+{% endblock %}

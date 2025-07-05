@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cornelia Diamond Resort & Spa - Luxury Hotel Email Automation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gold-gradient { background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%); }
+        .luxury-shadow { box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3); }
+        .hero-bg { 
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+                       url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%23001f3f" width="1200" height="800"/><path fill="%23d4af37" opacity="0.1" d="M0,400 C300,200 900,600 1200,400 L1200,800 L0,800 Z"/></svg>'); 
+            background-size: cover;
+            background-position: center;
+        }
+        .floating-card { 
+            transition: transform 0.3s ease, box-shadow 0.3s ease; 
+        }
+        .floating-card:hover { 
+            transform: translateY(-10px); 
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.2); 
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 gold-gradient rounded-full flex items-center justify-center">
+                        <i class="fas fa-crown text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-bold text-gray-900">Cornelia Diamond</span>
+                        <div class="text-sm text-gray-600">Resort & Spa</div>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="#features" class="text-gray-700 hover:text-yellow-600 transition">Ozellikler</a>
+                    <a href="#pricing" class="text-gray-700 hover:text-yellow-600 transition">Fiyatlar</a>
+                    <a href="#contact" class="text-gray-700 hover:text-yellow-600 transition">Iletisim</a>
+                    <a href="/login" class="gold-gradient text-white px-6 py-2 rounded-lg hover:opacity-90 transition">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Yonetim Paneli
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-bg text-white py-32 mt-16">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="mb-8">
+                <div class="w-24 h-24 gold-gradient rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i class="fas fa-gem text-white text-3xl"></i>
+                </div>
+                <h1 class="text-6xl font-bold mb-6">Cornelia Diamond Resort & Spa</h1>
+                <h2 class="text-2xl mb-8 text-yellow-300">Akilli Email Otomasyon Sistemi</h2>
+                <p class="text-xl mb-8 max-w-4xl mx-auto leading-relaxed">
+                    Yapay zeka destekli 5 dilli email otomasyon sistemi ile rezervasyon surecinizi tamamen otomatiklestirin. 
+                    Gmail entegrasyonu, dinamik fiyatlama ve profesyonel musteri iletisimi.
+                </p>
+            </div>
+            <div class="flex justify-center space-x-6">
+                <a href="/login" class="gold-gradient text-white px-8 py-4 rounded-lg font-semibold text-lg hover:opacity-90 transition luxury-shadow">
+                    <i class="fas fa-rocket mr-2"></i>Sistemi Baslat
+                </a>
+                <a href="#features" class="border-2 border-yellow-400 text-yellow-400 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-yellow-400 hover:text-black transition">
+                    <i class="fas fa-info-circle mr-2"></i>Ozellikler
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div id="features" class="py-20">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-bold text-gray-900 mb-4">Luks Teknoloji Ozellikleri</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Cornelia Diamond Resort & Spa icin ozel gelistirilmis profesyonel email otomasyon sistemi
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 mb-16">
+                <div class="floating-card bg-white p-8 rounded-xl shadow-lg">
+                    <div class="w-16 h-16 gold-gradient rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-brain text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">👥 Yapay Zeka Analizi</h3>
+                    <p class="text-gray-600">
+                        OpenAI GPT-4o ile email'leri analiz eder, misafir sayisi, gece sayisi, oda tipi ve tarihleri otomatik cikarir.
+                    </p>
+                </div>
+                
+                <div class="floating-card bg-white p-8 rounded-xl shadow-lg">
+                    <div class="w-16 h-16 gold-gradient rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-language text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">🌙 5 Dil Destegi</h3>
+                    <p class="text-gray-600">
+                        Turkce, Ingilizce, Almanca, Fransizca ve Rusca dillerinde otomatik dil tespiti ve profesyonel yanitlar.
+                    </p>
+                </div>
+                
+                <div class="floating-card bg-white p-8 rounded-xl shadow-lg">
+                    <div class="w-16 h-16 gold-gradient rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-envelope-open-text text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">🏨 Gmail Entegrasyonu</h3>
+                    <p class="text-gray-600">
+                        corneliabooking@yourbookinghub.org adresini 30 saniyede bir kontrol eder, yeni rezervasyon taleplerini otomatik isler.
+                    </p>
+                </div>
+                
+                <div class="floating-card bg-white p-8 rounded-xl shadow-lg">
+                    <div class="w-16 h-16 gold-gradient rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-calculator text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">📅 Dinamik Fiyatlama</h3>
+                    <p class="text-gray-600">
+                        Mevsimsel fiyatlar, cocuk politikalari ve canli doviz kurlari ile otomatik fiyat hesaplama.
+                    </p>
+                </div>
+                
+                <div class="floating-card bg-white p-8 rounded-xl shadow-lg">
+                    <div class="w-16 h-16 gold-gradient rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-users text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Musteri Yonetimi</h3>
+                    <p class="text-gray-600">
+                        Musteri gecmisi, tercihleri ve etkilesim kayitlari ile kapsamli CRM sistemi.
+                    </p>
+                </div>
+                
+                <div class="floating-card bg-white p-8 rounded-xl shadow-lg">
+                    <div class="w-16 h-16 gold-gradient rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-chart-line text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Gercek Zamanli Analitik</h3>
+                    <p class="text-gray-600">
+                        Email isleme istatistikleri, yanit oranlari, dil dagilimi ve musteri analizleri.
+                    </p>
+                </div>
+            </div>
+
+            <!-- System Status -->
+            <div class="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl p-8 text-center">
+                <h3 class="text-2xl font-bold mb-4">
+                    <i class="fas fa-check-circle mr-2"></i>Sistem Durumu: Aktif
+                </h3>
+                <p class="text-lg mb-4">
+                    Email otomasyon sistemi calisiyor ve rezervasyon taleplerini isliyor
+                </p>
+                <div class="flex justify-center space-x-8 text-sm">
+                    <div><i class="fas fa-envelope mr-2"></i>Gmail: Bagli</div>
+                    <div><i class="fas fa-robot mr-2"></i>OpenAI: Aktif</div>
+                    <div><i class="fas fa-database mr-2"></i>Veritabani: Calisiyor</div>
+                    <div><i class="fas fa-language mr-2"></i>5 Dil: Hazir</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pricing Section -->
+    <div id="pricing" class="bg-gray-100 py-20">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-bold text-gray-900 mb-4">Oda Fiyatlari</h2>
+                <p class="text-xl text-gray-600">Cornelia Diamond Resort & Spa mevsimsel fiyat listesi</p>
+            </div>
+            
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <div class="text-center mb-4">
+                        <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-bed text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">Standard Oda</h3>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-blue-600 mb-2">€100-1000</div>
+                        <div class="text-sm text-gray-600">Gece basina</div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-lg border-2 border-yellow-400">
+                    <div class="text-center mb-4">
+                        <div class="w-16 h-16 gold-gradient rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-crown text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">Suit Oda</h3>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-yellow-600 mb-2">€150-7000</div>
+                        <div class="text-sm text-gray-600">Gece basina</div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <div class="text-center mb-4">
+                        <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-home text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">Villa</h3>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-purple-600 mb-2">€250-10000</div>
+                        <div class="text-sm text-gray-600">Gece basina</div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <div class="text-center mb-4">
+                        <div class="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-gem text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">Presidential Villa</h3>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-red-600 mb-2">€1500-15000</div>
+                        <div class="text-sm text-gray-600">Gece basina</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center">
+                <div class="bg-white p-6 rounded-xl shadow-lg max-w-2xl mx-auto">
+                    <h4 class="text-xl font-bold mb-4">Cocuk Politikasi</h4>
+                    <div class="text-gray-600">
+                        <p class="mb-2">🧒 0-8.99 yas: Ucretsiz</p>
+                        <p>👦 9-11.99 yas: %50 indirim</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div id="contact" class="py-20">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-bold text-gray-900 mb-4">Iletisim</h2>
+                <p class="text-xl text-gray-600">Cornelia Diamond Resort & Spa ile iletisime gecin</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold mb-6">Rezervasyon Bilgileri</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <i class="fas fa-envelope text-yellow-600 mr-4"></i>
+                            <span>corneliabooking@yourbookinghub.org</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-phone text-yellow-600 mr-4"></i>
+                            <span>0090 242 710 16 00</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-globe text-yellow-600 mr-4"></i>
+                            <span>www.cornelioresort.com</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold mb-6">Sistem Ozellikleri</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center">
+                            <i class="fas fa-clock text-green-600 mr-3"></i>
+                            <span>30 saniyede bir email kontrolu</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-language text-green-600 mr-3"></i>
+                            <span>5 dil destegi (TR, EN, DE, FR, RU)</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-robot text-green-600 mr-3"></i>
+                            <span>OpenAI GPT-4o analiz</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-euro-sign text-green-600 mr-3"></i>
+                            <span>Canli doviz kurlari</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="gold-gradient text-white py-16">
+        <div class="max-w-4xl mx-auto text-center px-4">
+            <h2 class="text-4xl font-bold mb-4">Email Otomasyonunuzu Baslatin</h2>
+            <p class="text-xl mb-8">Cornelia Diamond Resort & Spa icin ozel gelistirilmis sistem</p>
+            <a href="/login" class="bg-white text-yellow-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition luxury-shadow">
+                <i class="fas fa-crown mr-2"></i>Yonetim Paneline Giris
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 gold-gradient rounded-full flex items-center justify-center">
+                            <i class="fas fa-crown text-white"></i>
+                        </div>
+                        <div>
+                            <div class="text-xl font-bold">Cornelia Diamond</div>
+                            <div class="text-sm text-gray-400">Resort & Spa</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-400">
+                        Luks otel email otomasyon sistemi ile rezervasyon surecinizi tamamen otomatiklestirin.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Ozellikler</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>AI Email Analizi</li>
+                        <li>5 Dil Destegi</li>
+                        <li>Dinamik Fiyatlama</li>
+                        <li>Musteri Yonetimi</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Teknoloji</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Python Flask</li>
+                        <li>OpenAI GPT-4o</li>
+                        <li>Gmail API</li>
+                        <li>Gercek Zamanli Isleme</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Baglantilar</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="/dashboard" class="hover:text-yellow-400">Dashboard</a></li>
+                        <li><a href="/login" class="hover:text-yellow-400">Yonetim Paneli</a></li>
+                        <li><a href="/test" class="hover:text-yellow-400">Sistem Testi</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Cornelia Diamond Resort & Spa Email Automation System. Tum haklari saklidir.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
